@@ -1,18 +1,9 @@
 // make connection to database 
 const supabase = require('../models/dbConnection')
 
-// controller for handle login
-const login = async (req, res) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: req.body.email,
-        password: req.body.password
-    }) 
-
-    res.send(data)
-}
-
+// controller for handle register
 const register = async (req, res) => {
-    const { data , error } = await supabase.auth.signUp({
+    const userData = await supabase.auth.signUp({
         email: req.body.email,
         password: req.body.password,
         options: {
@@ -23,7 +14,18 @@ const register = async (req, res) => {
         }
     })
 
-    res.send(data)
+    res.send(userData)
 }
 
-module.exports = { login, register }
+// controller for handle login
+const login = async (req, res) => {
+    const userData = await supabase.auth.signInWithPassword({
+        email: req.body.email,
+        password: req.body.password
+    }) 
+
+    
+    res.send(userData)
+}
+
+module.exports = { register, login }
