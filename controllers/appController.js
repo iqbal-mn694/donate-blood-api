@@ -1,33 +1,35 @@
 // make connection to database 
 const supabase = require('../models/dbConnection')
 
-const requestBlood =  async (req, res) => {
+exports.requestBlood =  async (req, res) => {
     const  { data: { user } } = await supabase.auth.getUser()
+
     if(user) {
-        const { bloodType,quantity, hospitalName, hospitalAddress, latitude, longitude } = req.body
+        const { bloodType, quantity, hospitalName, latitude, longitude } = req.body
+
         const request = await supabase
-                        .from('blood_request')
-                        .insert({
-                            user_id : user.id,
-                            blood_type: bloodType,
-                            quantity: quantity,
-                            hospital_name: hospitalName,
-                            hospital_address: hospitalAddress,
-                            latitude: latitude,
-                            longitude: longitude
+            .from('blood_request')
+            .insert({
+                user_id : user.id,
+                blood_type: bloodType,
+                quantity: quantity,
+                hospital_name: hospitalName,
+                location: `POINT(${longitude} ${latitude})`
         }).select()
+
         res.send(request)
     } else {
         res.send("Unauthorize")
     }
 }
 
-const showRequests = async (req, res) => {
+exports.showRequests = async (req, res) => {
     const  { data: { user } } = await supabase.auth.getUser()
+
     if(user) {
         const { data, error } = await supabase.rpc('nearby_request', {
-            lat: -7.383023880214685, 
-            long:  108.24426163886679            
+            lat: -7.488713054910411,
+            long:  108.05294789595146             
         })
         res.send(data)
     } else {
@@ -35,4 +37,22 @@ const showRequests = async (req, res) => {
     }
 }
 
-module.exports = { requestBlood, showRequests }
+exports.donateBlood = async (req, res) => {
+    const  { data: { user } } = await supabase.auth.getUser()
+
+    if(user) {
+        const donate = await supabase.from('donor').insert({
+            user_id: user.id
+        })
+
+        const donation = await supabase.from('donation').insert({
+            user_id: user.id,
+            request_id: req.body.requestId,
+            quantity: req.body.quantity,
+        })
+
+        res.send({ donate, donation })
+        } else {
+            res.send("Unauthorize")
+    }
+}
