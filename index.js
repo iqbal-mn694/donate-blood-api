@@ -18,4 +18,4 @@ app.use('/', require('./routes/app'))
 // auth route
 app.use('/auth', require('./routes/auth'))
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Running on port ${port}!`))

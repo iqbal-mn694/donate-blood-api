@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 
-const { requestBlood, showRequests, donateBlood } = require('../controllers/appController')
 const supabase = require('../models/dbConnection')
+
+const { requestBlood, showRequests, donateBlood, checkEligibelity, checkEl } = require('../controllers/appController')
 
 // penerima melakukan request
 router.post('/request', requestBlood)
 
-// melihat siapa saja yang membutuhkan request
+// melihat siapa saja yang membutuhkan request berdasarkan lokasi dan kecukupan darah
 router.get('/request', showRequests)
 
 // hanya untuk coba coba saja, boleh dihapus
@@ -25,10 +26,14 @@ router.get('/request-test', async(req, res) => {
     res.send(test)
 })
 
+// melakukan donor darah
+router.post('/donate', donateBlood)
+
 router.get('/donate', (req, res) => {
     res.send('ini donate')
-
 })
-router.post('/donate', donateBlood)
+
+router.post('/check', checkEligibelity)
+router.post('/check2', checkEl)
 
 module.exports = router
