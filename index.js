@@ -7,6 +7,7 @@ const port = 3000
 // make connection to database 
 const supabase = require('./models/dbConnection')
 
+
 // use middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
