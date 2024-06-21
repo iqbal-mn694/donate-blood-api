@@ -13,10 +13,17 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 
+
 // app route
 app.use('/', require('./routes/app'))
 
 // auth route
 app.use('/auth', require('./routes/auth'))
+
+// handling error
+app.use((err, req, res, next) => {
+    const { status = 404, message = "page not found"} = err
+    res.status(status).json({ error: true, status, message})
+})
 
 app.listen(port, () => console.log(`Running on port ${port}!`))
