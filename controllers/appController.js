@@ -1,13 +1,12 @@
 const asyncWrapper = require('../libs/asyncWrapper');
 const ErrorHandler = require('../libs/errorHandler');
 const { getBloodRequest, makeBloodRequest, getBloodRequestByID, updateRequestStatus } = require('../models/BloodRequest');
-const { countDonationByRequestID, makeDonation } = require('../models/Donation');
+const { countDonationByRequestID, insertDonation } = require('../models/Donation');
 const { insertDonor } = require('../models/Donor');
 
 
 // request blood module
-exports.requestBlood = asyncWrapper(async (req, res) => {
-    // blood request from user
+exports.makeBloodRequest = asyncWrapper(async (req, res) => {
     const getAuthID = req.authId
     const { bloodType, quantity, hospitalName, latitude, longitude } = req.body;
 
@@ -16,12 +15,12 @@ exports.requestBlood = asyncWrapper(async (req, res) => {
 });
 
 // show request blood module based on nearest location
-exports.showRequests = asyncWrapper(async (req, res) => {
+exports.getBloodRequest = asyncWrapper(async (req, res) => {
     const bloodRequest = await getBloodRequest()
     res.status(200).json(bloodRequest);
 })
 
-// donate blood module
+// donate blood
 exports.donateBlood = asyncWrapper(async (req, res) => {
   const getAuthID = req.authId
   const { requestID } = req.body
@@ -30,16 +29,17 @@ exports.donateBlood = asyncWrapper(async (req, res) => {
   const bloodRequest = await getBloodRequestByID(requestID)
   const bloodRequestQuantity = bloodRequest.quantity
 
-  // jika sudah memenuhi kuantitas maka ubah status
+  // check if user's blood request is fulfiled
   if(donationTotalByRequestID <=  bloodRequestQuantity) {
     const donor = await insertDonor(getAuthID)
-    const donation = await makeDonation(getAuthID, requestID)
+    const donation = await insertDonation(getAuthID, requestID)
 
     res.send({ donor, donation });
   }
 
+  // if fulfiled change status to fulfiled 
   const changeRequestStatus = await updateRequestStatus(requestID)
-  res.send(changeRequestStatus)
+  res.status(200).json(changeRequestStatus)
 })
 
 exports.checkEligibelity = async (req, res) => {

@@ -1,19 +1,19 @@
 const ErrorHandler = require("../libs/errorHandler");
-const db = require("./dbConnection")
+const db = require("./dbConnection");
 
 
+// find nearby request location with coordinates (latitude and longitude)
 exports.getBloodRequest = async () => {
-  // find nearby request location with coordinates (latitude and longitude)
   const { data, error } = await db.rpc('nearby_request', {        
       lat: -7.488713054910411,  
       long: 108.05294789595146,
     });
 
-    if(error) throw error
-    // show data result
-    return data
+    if(error) throw error;
+    return data;
 }
 
+// get blood request by detail
 exports.getBloodRequestByID = async(requestID) => {
   const { data, error } = await db
     .from('blood_request')
@@ -21,12 +21,12 @@ exports.getBloodRequestByID = async(requestID) => {
     .eq('id', requestID)
     
     if(error) throw error
-    if(data.length === 0) throw error("Request ID Not Found", 404)
+    if(data.length === 0) throw { message: "RequestID not found", statusCode: 404 }
     return data[0]
 }
 
+// make blood request
 exports.makeBloodRequest = async (getAuthID, bloodType, quantity, hospitalName, longitude, latitude) => {
-  // save blood request data from user to database
   const { data, error } = await db
     .from('blood_request')
     .insert({
@@ -42,6 +42,7 @@ exports.makeBloodRequest = async (getAuthID, bloodType, quantity, hospitalName, 
   return data
 }
 
+// update blood requst status to fulfilled
 exports.updateRequestStatus = async(requestID) => {
   const { data, error } = await db
   .from('blood_request')
@@ -50,7 +51,7 @@ exports.updateRequestStatus = async(requestID) => {
   .select()
   
   if(error) throw error
-  if(!data) throw new ErrorHandler("Tidak ada di database", 404)
+  if(!data) throw { message: "RequestID tidak ditemukan", error: 404 };
   return data
 }
 

@@ -1,7 +1,7 @@
 const ErrorHandler = require("../libs/errorHandler");
 const db = require("./dbConnection")
 
-exports.makeDonation = async(getAuthID, requestID) => {
+exports.insertDonation = async(getAuthID, requestID) => {
     const { data, error }  = await db
     .from('donation')
     .insert({
@@ -11,8 +11,7 @@ exports.makeDonation = async(getAuthID, requestID) => {
     .select()
 
     if(error) throw error
-    if(!data) throw new ErrorHandler("Tidak ada di database", 404)
-        return data
+    return data
 }
 
 exports.countDonationByRequestID = async (requestID) => {
