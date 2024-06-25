@@ -40,7 +40,6 @@ const { check } = require('express-validator');
  *             password: 
  *              type: string
  *              description: Password minimal 8 karakter
- *              example: 12345678
  *    responses:
  *      201:
  *        description: Berhasil registrasi
@@ -93,7 +92,6 @@ router.post('/register',
  *             password: 
  *              type: string
  *              description: Password minimal 8 karakter
- *              example: 12345678
  *    responses:
  *      200:
  *        description: User berhasil login
