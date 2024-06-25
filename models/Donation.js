@@ -1,4 +1,3 @@
-const ErrorHandler = require("../libs/errorHandler");
 const db = require("./dbConnection")
 
 exports.insertDonation = async(getAuthID, requestID) => {
@@ -22,4 +21,13 @@ exports.countDonationByRequestID = async (requestID) => {
 
     if(error) throw error
     return data[0].count
+}
+
+exports.getDonation = async () => {
+  const { data, error } = await db
+    .from('donation')
+    .select();
+
+  if(error) throw error;
+  return data;
 }

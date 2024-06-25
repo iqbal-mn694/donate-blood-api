@@ -1,4 +1,3 @@
-const ErrorHandler = require('../libs/errorHandler')
 const supabase = require('../models/dbConnection')
 
 const authMiddleware = async(req, res, next) => {            

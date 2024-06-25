@@ -1,30 +1,29 @@
 require('dotenv').config()
 
-const express = require('express')
-const app = express()
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const errorHandler = require('./middleware/errorHandler');
+const xss = require('xss-clean');
 const port = 3000
 
-// make connection to database 
-const supabase = require('./models/dbConnection')
-const errorHandler = require('./libs/errorHandlerr')
-
+const app = express()
 
 // use middleware
+app.use(cors());
+
+app.use(helmet());
+app.use(xss());
+
+app.disable('x-powered-by')
+
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
 
 
-// app route
+// routes
 app.use('/', require('./routes/app'))
-
-// auth route
 app.use('/auth', require('./routes/auth'))
-
-// handling error
-// app.use((err, req, res, next) => {
-//     const { status = 404, message = "page not found"} = err
-//     res.status(status).json({ error: true, status, message})
-// })
 
 app.use(errorHandler)
 

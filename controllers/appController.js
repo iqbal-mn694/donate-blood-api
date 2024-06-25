@@ -1,7 +1,7 @@
 const asyncWrapper = require('../libs/asyncWrapper');
-const ErrorHandler = require('../libs/errorHandler');
+
 const { getBloodRequest, makeBloodRequest, getBloodRequestByID, updateRequestStatus } = require('../models/BloodRequest');
-const { countDonationByRequestID, insertDonation } = require('../models/Donation');
+const { countDonationByRequestID, insertDonation, getDonation } = require('../models/Donation');
 const { insertDonor } = require('../models/Donor');
 
 
@@ -30,18 +30,23 @@ exports.donateBlood = asyncWrapper(async (req, res) => {
   const bloodRequestQuantity = bloodRequest.quantity
 
   // check if user's blood request is fulfiled
-  if(donationTotalByRequestID <=  bloodRequestQuantity) {
-    const donor = await insertDonor(getAuthID)
-    const donation = await insertDonation(getAuthID, requestID)
+  if(donationTotalByRequestID <  bloodRequestQuantity) {
+    const donor = await insertDonor(getAuthID);
+    const donation = await insertDonation(getAuthID, requestID);
 
-    res.send({ donor, donation });
+    res.status(201).json({ success: true, message: "Blood has been donated successfully" });
   }
 
   // if fulfiled change status to fulfiled 
   const changeRequestStatus = await updateRequestStatus(requestID)
-  res.status(200).json(changeRequestStatus)
+  res.status(201).json(changeRequestStatus)
 })
 
+exports.donation = asyncWrapper(async (req, res) => {
+  const donation = await getDonation();
+
+  res.status(200).json(donation);
+})
 exports.checkEligibelity = async (req, res) => {
   const isEligible = require('../libs/isEligibel')
   // const { data: { user }, errorUser } = await supabase.auth.getUser();

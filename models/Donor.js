@@ -1,4 +1,3 @@
-const ErrorHandler = require("../libs/errorHandler");
 const db = require("./dbConnection")
 
 exports.insertDonor = async(getAuthID) => {

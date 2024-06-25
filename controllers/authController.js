@@ -1,4 +1,5 @@
 // make connection to database 
+const { validationResult } = require('express-validator')
 const supabase = require('../models/dbConnection')
 
 // controller for handle register
@@ -31,7 +32,8 @@ exports.login = async (req, res) => {
             password: req.body.password
         })
         
-        if(error) throw error
+        if(error) throw error;
+
 
         res.send(data)
     } catch (error) {

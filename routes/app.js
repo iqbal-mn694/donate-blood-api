@@ -3,7 +3,7 @@ const router = express.Router()
 
 const authMiddleware = require('../middleware/authMiddleware')
 
-const { showRequests, donateBlood, checkEligibelity, checkEl, makeBloodRequest, getBloodRequest } = require('../controllers/appController')
+const { donateBlood, checkEligibelity, checkEl, makeBloodRequest, getBloodRequest, donation } = require('../controllers/appController')
 
 // penerima melakukan request
 router.post('/request', authMiddleware , makeBloodRequest)
@@ -28,11 +28,10 @@ router.get('/request-test', async(req, res) => {
 
 // melakukan donor darah
 router.post('/donate', authMiddleware, donateBlood)
-
-router.get('/donate', authMiddleware, (req, res) => {
-    res.send('ini donate')
-})
     
 router.post('/check', checkEligibelity)
+
+// donation history
+router.get('/donation', authMiddleware, donation)
 
 module.exports = router
