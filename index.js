@@ -27,4 +27,4 @@ app.use('/auth', require('./routes/auth'))
 
 app.use(errorHandler)
 
-app.listen(PORT, "0.0.0.0", () => console.log(`Running on port ${port}!`))
+app.listen(PORT, "0.0.0.0", () => console.log(`Running on port ${PORT}!`))
