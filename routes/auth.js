@@ -107,7 +107,6 @@ router.post('/register',
  *                password: 
  *                  type: string
  *                  description: Password minimal 8 karakter
- *                  example: 123456878
  *              
  *      500:
  *        description: Internal server error
