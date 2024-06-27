@@ -1,7 +1,5 @@
-const { validationResult } = require("express-validator");
-
 const errorHandler = (err, req, res, next) => {
-  let message = err.message || "Internal Server Error";
+  let messages = err.messages || "Internal Server Error";
   let statusCode = err.statusCode || 500;
 
   if(err.code === 'XX000' || err.code === '22P02') {
@@ -9,9 +7,7 @@ const errorHandler = (err, req, res, next) => {
     message = 'Your input is not valid';
   }
 
-  const err1 = validationResult(req)
-  console.log(err1)
-  res.status(statusCode).json({ error: true, message});
+  res.status(statusCode).json({ error: true, messages });
 }
 
 module.exports = errorHandler;

@@ -33,9 +33,9 @@ exports.login = async (req, res) => {
         })
         
         if(error) throw error;
-
-
-        res.send(data)
+        
+        const accessToken = data.session.access_token;
+        res.status(200).json({ message: 'Login has been successfully', accessToken })
     } catch (error) {
         res.send(error)
     }

@@ -4,6 +4,8 @@ const router = express.Router()
 
 const { register,login } = require('../controllers/authController');
 const { check } = require('express-validator');
+const { validateInput } = require('../middleware/validator');
+const supabase = require('../models/dbConnection');
     
 /**
  * @swagger
@@ -65,11 +67,24 @@ const { check } = require('express-validator');
  *      500:
  *        description: internal server error
 */
-router.post('/register',
-  check('firstName', 'First name is required').notEmpty(),
-  check('email', 'Email is not valid').isEmail(),
-  check('password', 'Password minimum 8 characters').notEmpty().isLength({ min: 8}),
-  register)
+router.post('/register', validateInput([
+  check('name').notEmpty().withMessage('Name is required'),
+  check('email').isEmail().withMessage('E-mail is not valid')
+    .normalizeEmail()
+    .custom(async email => {
+      const user = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      if(user) throw { email: 'E-mail already in use' };
+  }),
+  check('password')
+    .notEmpty().withMessage('Password is required')
+    .isLength({ min: 8}).withMessage('Password minimun 8 characters')
+    .isStrongPassword().withMessage('Password must be strong')
+]), register);
 
   
 /**
@@ -111,7 +126,12 @@ router.post('/register',
  *      500:
  *        description: Internal server error
 */
-router.post('/login', check('password', 'Password minimum 8 characters').notEmpty().isLength({ min: 8}),
-login)
+router.post('/login', validateInput([
+  check('email').isEmail().withMessage('Email is not valid').normalizeEmail(),
+  check('password')
+    .notEmpty().withMessage('Password is required')
+    .isLength({ min: 8}).withMessage('Password minimun 8 characters')
+    .isStrongPassword().withMessage('Password must be strong')
+]), login);
 
-module.exports = router
+module.exports = router;
