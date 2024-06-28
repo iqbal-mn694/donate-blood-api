@@ -4,10 +4,10 @@ exports.insertDonor = async(getAuthID) => {
     const { data, error } = await db
     .from('donor')
     .insert({
-      user_id: getAuthID,
+      user_id: getAuthID
     })
     .select()
 
-    if(error) throw error
+    if(error) throw error;
     return data
 }

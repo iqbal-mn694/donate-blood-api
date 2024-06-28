@@ -131,7 +131,6 @@ router.post('/login', validateInput([
   check('password')
     .notEmpty().withMessage('Password is required')
     .isLength({ min: 8}).withMessage('Password minimun 8 characters')
-    .isStrongPassword().withMessage('Password must be strong')
 ]), login);
 
 module.exports = router;

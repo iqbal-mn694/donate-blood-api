@@ -1,4 +1,4 @@
-const supabase = require('../models/dbConnection')
+const supabase = require('../models/dbConnection');
 
 const authMiddleware = async(req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -7,14 +7,13 @@ const authMiddleware = async(req, res, next) => {
     try {
         // get authenticated user id
         const { data: { user }, error } = await supabase.auth.getUser();
-        req.authId = user.id
+        req.authId = user.id;
 
-        if(!error && !token) throw error
-        next()
+        if(error  || !token) throw error;
+        next();
     } catch (error) {
-        next({ message: 'User not authenticated or not valid access token', statusCode: 401})
+        next({ messages: 'User not authenticated or not valid access token', statusCode: 401});
     }
-    
 }
 
-module.exports = authMiddleware
+module.exports = authMiddleware;

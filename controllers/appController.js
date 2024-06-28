@@ -7,23 +7,26 @@ const { insertDonor } = require('../models/Donor');
 
 // request blood module
 exports.makeBloodRequest = asyncWrapper(async (req, res) => {
-    const getAuthID = req.authId
-    const { bloodType, quantity, hospitalName, latitude, longitude } = req.body;
+  const getAuthID = req.authId;
+  const { bloodType, quantity, hospitalName, latitude, longitude } = req.body;
 
-    const bloodRequest = await makeBloodRequest(getAuthID, bloodType, quantity, hospitalName, latitude, longitude)
-    res.status(201).json(bloodRequest)
+  const bloodRequest = await makeBloodRequest(getAuthID, bloodType, quantity, hospitalName, latitude, longitude);
+
+  res.status(201).json(bloodRequest)
 });
 
 // show request blood module based on nearest location
 exports.getBloodRequest = asyncWrapper(async (req, res) => {
-    const bloodRequest = await getBloodRequest()
+    const { lat, long } = req.query;
+    const bloodRequest = await getBloodRequest(lat, long);
+
     res.status(200).json(bloodRequest);
 })
 
-// donate blood
-exports.donateBlood = asyncWrapper(async (req, res) => {
-  const getAuthID = req.authId
-  const { requestID } = req.body
+// donate blood by request ID
+exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
+  const getAuthID = req.authId;
+  const { requestID } = req.params;
 
   const donationTotalByRequestID = await countDonationByRequestID(requestID)
   const bloodRequest = await getBloodRequestByID(requestID)
@@ -38,8 +41,17 @@ exports.donateBlood = asyncWrapper(async (req, res) => {
   }
 
   // if fulfiled change status to fulfiled 
-  const changeRequestStatus = await updateRequestStatus(requestID)
+  const changeRequestStatus = await updateRequestStatus(requestID);
+
   res.status(201).json(changeRequestStatus)
+});
+
+exports.donateBlood = asyncWrapper(async (req, res) => {
+  const getAuthID = req.authId;
+  const donor = await insertDonor(getAuthID);
+  const donation = await insertDonation(getAuthID);
+
+  res.status(201).json({ success: true, message: "Blood has been donated successfully" });
 })
 
 exports.donation = asyncWrapper(async (req, res) => {

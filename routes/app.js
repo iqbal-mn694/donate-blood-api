@@ -3,7 +3,7 @@ const router = express.Router()
 
 const authMiddleware = require('../middleware/authMiddleware')
 
-const { donateBlood, checkEligibelity, checkEl, makeBloodRequest, getBloodRequest, donation } = require('../controllers/appController')
+const { donateBlood, checkEligibelity, checkEl, makeBloodRequest, getBloodRequest, donation, donateBloodByRequestID } = require('../controllers/appController')
 
 /**
  * @swagger
@@ -289,6 +289,8 @@ router.post('/request', authMiddleware , makeBloodRequest)
  *        description: Internal server error
 */
 router.post('/donate', authMiddleware, donateBlood)
+
+router.post('/donate/:requestID', authMiddleware, donateBloodByRequestID)
 
 router.get('/request-test', async(req, res) => {    
     const test = await supabase.from('blood_request').insert(
