@@ -74,16 +74,16 @@ router.post('/register', validateInput([
     .custom(async email => {
       const user = await supabase
         .from('users')
-        .select('*')
+        .select()
         .eq('email', email)
         .single();
 
-      if(user) throw { email: 'E-mail already in use' };
-  }),
+      if(!user) throw { email: 'E-mail already in use' };
+  }), // bug ketika pengecekan email sudah terdaftar atau belum
   check('password')
     .notEmpty().withMessage('Password is required')
     .isLength({ min: 8}).withMessage('Password minimun 8 characters')
-    .isStrongPassword().withMessage('Password must be strong')
+    // .isStrongPassword().withMessage('Password must be strong')
 ]), register);
 
   
@@ -130,7 +130,6 @@ router.post('/login', validateInput([
   check('email').isEmail().withMessage('Email is not valid').normalizeEmail(),
   check('password')
     .notEmpty().withMessage('Password is required')
-    .isLength({ min: 8}).withMessage('Password minimun 8 characters')
 ]), login);
 
 module.exports = router;

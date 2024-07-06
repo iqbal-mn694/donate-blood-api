@@ -1,13 +1,12 @@
-const supabase = require('../models/dbConnection');
+const db = require('../models/dbConnection');
 
-const authMiddleware = async(req, res, next) => {
+exports.auth = async(req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
-        // get authenticated user id
-        const { data: { user }, error } = await supabase.auth.getUser();
-        req.authId = user.id;
+        const { data: { user }, error } = await db.auth.getUser();
+        req.user = user;
 
         if(error  || !token) throw error;
         next();
@@ -16,4 +15,4 @@ const authMiddleware = async(req, res, next) => {
     }
 }
 
-module.exports = authMiddleware;
+// module.exports = authMiddleware;

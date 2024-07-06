@@ -1,7 +1,7 @@
 const errorHandler = (err, req, res, next) => {
-  let messages = err.messages || "Internal Server Error";
+  let messages = err.messages || err.message || "Internal Server Error";
   let statusCode = err.statusCode || 500;
-
+  	
   if(err.code === 'XX000' || err.code === '22P02') {
     statusCode = 422;
     message = 'Your input is not valid';
