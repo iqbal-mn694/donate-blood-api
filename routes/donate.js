@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { auth } = require('../middleware/auth')
 
-const { donateBlood, donateBloodByRequestID } = require('../controllers/appController');
+const { donateBlood, donateBloodByRequestID } = require('../controllers/donateController');
 
 
 /**
@@ -12,27 +12,57 @@ const { donateBlood, donateBloodByRequestID } = require('../controllers/appContr
  *  post:
  *    summary: Melakukan donor darah
  *    tags: [App]
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *             requestID:
- *              type: int,
- *              description: request id,
- *              example: 1
- *            
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - name: Authorization
+ *        in: header
+ *        required: true
+ *        description: Bearer token
+ *        schema: 
+ *          type: string
+ *          example: input_bearer_token
  *    responses:
  *      201:
  *        description: Berhasil mendonorkan darah
  *      401:
- *        description: User is not authenticated
+ *        description: User is not authenticated ot not valid token
  *      500:
  *        description: Internal server error
 */
 router.post('/', auth, donateBlood);
+
+/**
+ * @swagger
+ * /api/v1/donate/{requestID}:
+ *  post:
+ *    summary: Melakukan donor darah berdasarkan request id tertentu
+ *    tags: [App]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - name: Authorization
+ *        in: header
+ *        required: true
+ *        description: Bearer token
+ *        schema: 
+ *          type: string
+ *          example: input_bearer_token
+ *      - name: requestID
+ *        in: path
+ *        required: true
+ *        description: requestID
+ *        schema: 
+ *          type: int
+ *          example: 2
+ *    responses:
+ *      201:
+ *        description: Berhasil mendonorkan darah
+ *      401:
+ *        description: User is not authenticated ot not valid token
+ *      500:
+ *        description: Internal server error
+*/
 router.post('/:requestID', auth, donateBloodByRequestID);
 
 router.get('/request-test', async(req, res) => {    

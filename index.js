@@ -15,6 +15,14 @@ const options = {
       title: 'Blood Donate App',
       description: 'Web App for Donate Blood'
     },
+    components: {
+      securitySchemas: {
+        bearerAuth: {
+          type: 'http',
+          schema: 'bearer',
+        }
+      }
+    },
     servers: [
       {
         url: 'https://donate-blood-api-development.up.railway.app',

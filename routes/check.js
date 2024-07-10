@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { checkEligibelity } = require('../controllers/appController');
+const { checkEligibelity } = require('../controllers/checkController');
 
 /**
  * @swagger

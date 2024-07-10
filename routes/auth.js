@@ -61,32 +61,14 @@ const supabase = require('../models/dbConnection');
  *                email:
  *                  type: string,
  *                  description: Email address
- *                password: 
- *                  type: string
- *                  description: Password minimal 8 karakter          
+ *                  example: asep12@example.com  
+ *      401:
+ *        description: unauthorized
  *      500:
  *        description: internal server error
 */
-router.post('/register', validateInput([
-  check('name').notEmpty().withMessage('Name is required'),
-  check('email').isEmail().withMessage('E-mail is not valid')
-    .normalizeEmail()
-    .custom(async email => {
-      const user = await supabase
-        .from('users')
-        .select()
-        .eq('email', email)
-        .single();
+router.post('/register', register);
 
-      if(!user) throw { email: 'E-mail already in use' };
-  }), // bug ketika pengecekan email sudah terdaftar atau belum
-  check('password')
-    .notEmpty().withMessage('Password is required')
-    .isLength({ min: 8}).withMessage('Password minimun 8 characters')
-    // .isStrongPassword().withMessage('Password must be strong')
-]), register);
-
-  
 /**
  * @swagger
  * /api/v1/auth/login:
@@ -115,21 +97,16 @@ router.post('/register', validateInput([
  *            schema:
  *              type: object
  *              properties:
- *                email:
- *                  type: string,
- *                  description: Email address
- *                  example: asep12@gmail.com
- *                password: 
+ *                token:
  *                  type: string
- *                  description: Password minimal 8 karakter
+ *                  description: Access Token
+ *                  example: bearer_token123
  *              
+ *      401:
+ *        description: Unauthorized
  *      500:
  *        description: Internal server error
 */
-router.post('/login', validateInput([
-  check('email').isEmail().withMessage('Email is not valid').normalizeEmail(),
-  check('password')
-    .notEmpty().withMessage('Password is required')
-]), login);
+router.post('/login', login);
 
 module.exports = router;
