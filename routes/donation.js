@@ -6,10 +6,17 @@ const { donation, donationByID, deleteDonation, clearDonation } = require('../co
 
 /**
  * @swagger
+ * tags:
+ *  name: Donation
+ *  description: Donation history apis
+ */
+
+/**
+ * @swagger
  * /api/v1/donations:
  *  get:
  *    summary: Riwayat donor darah
- *    tags: [App]
+ *    tags: [Donation]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -65,7 +72,7 @@ router.get('/', auth, donation);
  * /api/v1/donations/{donationID}:
  *  get:
  *    summary: Riwayat donor darah berdasarkan donation id tertentu
- *    tags: [App]
+ *    tags: [Donation]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -120,7 +127,7 @@ router.get('/:donationID', auth, donationByID);
  * /api/v1/donations/{donationID}:
  *  delete:
  *    summary: Menghapus riwayat donation berdasarkan donation id tertentu
- *    tags: [App]
+ *    tags: [Donation]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -158,7 +165,7 @@ router.delete('/:donationID', auth, deleteDonation);
  * /api/v1/donations/:
  *  delete:
  *    summary: Menghapus semua riwayat donation
- *    tags: [App]
+ *    tags: [Donation]
  *    security:
  *      - bearerAuth: []
  *    parameters:

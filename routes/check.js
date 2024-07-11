@@ -5,10 +5,18 @@ const { checkEligibelity } = require('../controllers/checkController');
 
 /**
  * @swagger
+ * tags:
+ *  name: Check
+ *  description: check eligibelity apis
+ */
+
+
+/**
+ * @swagger
  * /api/v1/check:
  *  post:
  *    summary: Mengecek kelayakan pendonor
- *    tags: [App]
+ *    tags: [Check]
  *    requestBody:
  *      required: true
  *      content:

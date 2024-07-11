@@ -2,12 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 
-/**
- * @swagger
- * tags:
- *  name: App
- *  description: blood app apis
- */
 router.use('/auth', require('./auth'));
 router.use('/check', require('./check'));
 router.use('/requests', require('./request'));

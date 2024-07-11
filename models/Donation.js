@@ -19,6 +19,7 @@ exports.countDonationByRequestID = async (requestID) => {
       .select('count')
       .eq('request_id', requestID)
 
+      
     if(error) throw error
     return data[0].count
 }

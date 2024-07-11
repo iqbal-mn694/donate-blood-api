@@ -5,13 +5,20 @@ const { auth } = require('../middleware/auth')
 
 const { donateBlood, donateBloodByRequestID } = require('../controllers/donateController');
 
+/**
+ * @swagger
+ * tags:
+ *  name: Donate
+ *  description: Donate blood apis
+ */
+
 
 /**
  * @swagger
  * /api/v1/donate:
  *  post:
  *    summary: Melakukan donor darah
- *    tags: [App]
+ *    tags: [Donate]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -37,7 +44,7 @@ router.post('/', auth, donateBlood);
  * /api/v1/donate/{requestID}:
  *  post:
  *    summary: Melakukan donor darah berdasarkan request id tertentu
- *    tags: [App]
+ *    tags: [Donate]
  *    security:
  *      - bearerAuth: []
  *    parameters:

@@ -14,10 +14,18 @@ const {
 
 /**
  * @swagger
+ * tags:
+ *  name: Request
+ *  description: Blood request apis
+ */
+
+
+/**
+ * @swagger
  * /api/v1/requests:
  *  post:
  *    summary: Membuat request darah
- *    tags: [App]
+ *    tags: [Request]
  *    security: 
  *      - bearerAuth: []
  *    parameters:
@@ -35,10 +43,6 @@ const {
  *            schema:
  *              type: object
  *              properties:
- *                id:
- *                  type: int
- *                  description: requestID
- *                  example: 1
  *                bloodType:
  *                  type: string,
  *                  description: Tipe darah yang melakukan request darah,
@@ -71,26 +75,38 @@ const {
  *                  type: int
  *                  description: requestID
  *                  example: 1
+ *                user_id:
+ *                  type: uuid
+ *                  description: uuid user
+ *                  example: f25678393huwdnd2
  *                bloodType:
- *                  type: string,
- *                  description: Tipe darah yang melakukan request darah,
+ *                  type: string
+ *                  description: Tipe darah
  *                  example: A
  *                quantity:
- *                  type: int,
+ *                  type: int
  *                  description: Jumlah labu yang dibutuhkan
  *                  example: 2
- *                hospitalName:
- *                  type: string,
- *                  description: Nama rumah sakit
- *                  example: RSUD dr.Soekardjo
- *                latitude: 
+ *                hospital_name:
+ *                  type: string
+ *                  description: Hospital name
+ *                  example: TMC
+ *                request_at:
+ *                  type: date
+ *                  description: Waktu melakukan donor darah
+ *                  example: 2024-06-18T09:51:21.959935
+ *                status:
+ *                  type: string
+ *                  description: Apakah sudah terpenuhi
+ *                  example: null
+ *                lat:
  *                  type: float
- *                  description: Koordinat(lat) yang melakukan request darah
- *                  example: -7.48959971004408
- *                longitude: 
+ *                  description: Latitude
+ *                  example: -7.1234
+ *                long:
  *                  type: float
- *                  description: Koordinat(long) yang melakukan request darah
- *                  example: 108.051243876179
+ *                  description: Longitude
+ *                  example: 110.1234
  *      401:
  *        description: User not authenticated or not valid token     
  *      500:
@@ -103,7 +119,7 @@ router.post('/', auth, makeBloodRequest);
  * /api/v1/requests:
  *  get:
  *    summary: List request yang telah dibuat oleh user yang sedang login
- *    tags: [App]
+ *    tags: [Request]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -135,18 +151,34 @@ router.post('/', auth, makeBloodRequest);
  *                        type: uuid
  *                        description: uuid user
  *                        example: f25678393huwdnd2
- *                      requestID:
- *                        type: int
- *                        description: request id
- *                        example: 1
- *                      quantity:
+ *                      bloodType:
  *                        type: string
+ *                        description: Tipe darah
+ *                        example: A
+ *                      quantity:
+ *                        type: int
  *                        description: Jumlah labu yang dibutuhkan
  *                        example: 2
- *                      donation_at:
+ *                      hospital_name:
+ *                        type: string
+ *                        description: Hospital name
+ *                        example: TMC
+ *                      request_at:
  *                        type: date
  *                        description: Waktu melakukan donor darah
  *                        example: 2024-06-18T09:51:21.959935
+ *                      status:
+ *                        type: string
+ *                        description: Apakah sudah terpenuhi
+ *                        example: Fulfilled
+ *                      lat:
+ *                        type: float
+ *                        description: Latitude
+ *                        example: -7.1234
+ *                      long:
+ *                        type: float
+ *                        description: Longitude
+ *                        example: 110.1234
  *      401:
  *        description: User is not authenticated 
  *      500:
@@ -154,12 +186,15 @@ router.post('/', auth, makeBloodRequest);
 */
 router.get('/', auth, getBloodRequests);
 
+
+
+
 /**
  * @swagger
  * /api/v1/requests/{requestID}:
  *  get:
  *    summary: Menampilkan detail request yang telah dibuat oleh user
- *    tags: [App]
+ *    tags: [Request]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -186,26 +221,38 @@ router.get('/', auth, getBloodRequests);
  *                  type: int
  *                  description: requestID
  *                  example: 1
+ *                user_id:
+ *                  type: uuid
+ *                  description: uuid user
+ *                  example: f25678393huwdnd2
  *                bloodType:
- *                  type: string,
- *                  description: Tipe darah yang melakukan request darah,
+ *                  type: string
+ *                  description: Tipe darah
  *                  example: A
  *                quantity:
- *                  type: int,
+ *                  type: int
  *                  description: Jumlah labu yang dibutuhkan
  *                  example: 2
- *                hospitalName:
- *                  type: string,
- *                  description: Nama rumah sakit
- *                  example: RSUD dr.Soekardjo
- *                latitude: 
+ *                hospital_name:
+ *                  type: string
+ *                  description: Hospital name
+ *                  example: TMC
+ *                request_at:
+ *                  type: date
+ *                  description: Waktu melakukan donor darah
+ *                  example: 2024-06-18T09:51:21.959935
+ *                status:
+ *                  type: string
+ *                  description: Apakah sudah terpenuhi
+ *                  example: Fulfilled
+ *                lat:
  *                  type: float
- *                  description: Koordinat(lat) yang melakukan request darah
- *                  example: -7.48959971004408
- *                longitude: 
+ *                  description: Latitude
+ *                  example: -7.1234
+ *                long:
  *                  type: float
- *                  description: Koordinat(long) yang melakukan request darah
- *                  example: 108.051243876179
+ *                  description: Longitude
+ *                  example: 110.1234
  *      401:
  *        description: User is not authenticated 
  *      500:
@@ -218,7 +265,7 @@ router.get('/:requestID', auth, getBloodRequest);
  * /api/v1/requests:
  *  put:
  *    summary: Mengubah request darah
- *    tags: [App]
+ *    tags: [Request]
  *    security: 
  *      - bearerAuth: []
  *    parameters:
@@ -236,10 +283,6 @@ router.get('/:requestID', auth, getBloodRequest);
  *            schema:
  *              type: object
  *              properties:
- *                id:
- *                  type: int
- *                  description: requestID
- *                  example: 1
  *                bloodType:
  *                  type: string,
  *                  description: Tipe darah yang melakukan request darah,
@@ -272,28 +315,42 @@ router.get('/:requestID', auth, getBloodRequest);
  *                  type: int
  *                  description: requestID
  *                  example: 1
+ *                user_id:
+ *                  type: uuid
+ *                  description: uuid user
+ *                  example: f25678393huwdnd2
  *                bloodType:
- *                  type: string,
- *                  description: Tipe darah yang melakukan request darah,
+ *                  type: string
+ *                  description: Tipe darah
  *                  example: A
  *                quantity:
- *                  type: int,
+ *                  type: int
  *                  description: Jumlah labu yang dibutuhkan
  *                  example: 2
- *                hospitalName:
- *                  type: string,
- *                  description: Nama rumah sakit
- *                  example: RSUD dr.Soekardjo
- *                latitude: 
+ *                hospital_name:
+ *                  type: string
+ *                  description: Hospital name
+ *                  example: TMC
+ *                request_at:
+ *                  type: date
+ *                  description: Waktu melakukan donor darah
+ *                  example: 2024-06-18T09:51:21.959935
+ *                status:
+ *                  type: string
+ *                  description: Apakah sudah terpenuhi
+ *                  example: Fulfilled
+ *                lat:
  *                  type: float
- *                  description: Koordinat(lat) yang melakukan request darah
- *                  example: -7.48959971004408
- *                longitude: 
- *                  type: float
- *                  description: Koordinat(long) yang melakukan request darah
- *                  example: 108.051243876179
+ *                  description: Latitude
+ *                  example: -7.1234
+ *                long:
+ *                   type: float
+ *                   description: Longitude
+ *                   example: 110.1234
  *      401:
  *        description: User not authenticated or not valid token     
+ *      404:
+ *        description: requestID is not found     
  *      500:
  *        description: Internal server error
 */
@@ -304,7 +361,7 @@ router.put('/:requestID', auth, updateBloodRequest);
  * /api/v1/requests/{requestID}:
  *  delete:
  *    summary: Menghapus request id tertentu
- *    tags: [App]
+ *    tags: [Request]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -342,7 +399,7 @@ router.delete('/:requestID', auth, deleteBloodRequest);
  * /api/v1/requests/:
  *  delete:
  *    summary: Menghapus semua request
- *    tags: [App]
+ *    tags: [Request]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -371,12 +428,22 @@ router.delete('/:requestID', auth, deleteBloodRequest);
 */
 router.delete('/', auth, clearBloodRequest);
 
+
+
+
+
+/**
+ * @swagger
+ * tags:
+ *  name: Recipients
+ *  description: Recipients apis
+ */
 /**
  * @swagger
  * /api/v1/requests?recipients/nearby?long={value}&lat={value}:
  *  get:
- *    summary: List orang sekitar yang sedang membututuhkan darah atau melakukan request darah
- *    tags: [App]
+ *    summary: List orang sekitar yang sedang membutuhkan darah atau melakukan request darah
+ *    tags: [Recipients]
  *    parameters:
  *     - in: headers
  *       name: Authorization
@@ -449,7 +516,7 @@ router.get('/recipients/nearby', auth, getNearbyRecipients);
  * /api/v1/{requestID}/recipients:
  *  get:
  *    summary: Menampilkan detail request penerima darah
- *    tags: [App]
+ *    tags: [Recipients]
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -476,26 +543,38 @@ router.get('/recipients/nearby', auth, getNearbyRecipients);
  *                  type: int
  *                  description: requestID
  *                  example: 1
+ *                user_id:
+ *                  type: uuid
+ *                  description: uuid user
+ *                  example: f25678393huwdnd2
  *                bloodType:
- *                  type: string,
- *                  description: Tipe darah yang melakukan request darah,
+ *                  type: string
+ *                  description: Tipe darah
  *                  example: A
  *                quantity:
- *                  type: int,
+ *                  type: int
  *                  description: Jumlah labu yang dibutuhkan
  *                  example: 2
- *                hospitalName:
- *                  type: string,
- *                  description: Nama rumah sakit
- *                  example: RSUD dr.Soekardjo
- *                latitude: 
+ *                hospital_name:
+ *                  type: string
+ *                  description: Hospital name
+ *                  example: TMC
+ *                request_at:
+ *                  type: date
+ *                  description: Waktu melakukan donor darah
+ *                  example: 2024-06-18T09:51:21.959935
+ *                status:
+ *                  type: string
+ *                  description: Apakah sudah terpenuhi
+ *                  example: Fulfilled
+ *                lat:
  *                  type: float
- *                  description: Koordinat(lat) yang melakukan request darah
- *                  example: -7.48959971004408
- *                longitude: 
+ *                  description: Latitude
+ *                  example: -7.1234
+ *                long:
  *                  type: float
- *                  description: Koordinat(long) yang melakukan request darah
- *                  example: 108.051243876179
+ *                  description: Longitude
+ *                  example: 110.1234
  *      401:
  *        description: User is not authenticated 
  *      500:

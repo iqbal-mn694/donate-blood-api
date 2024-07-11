@@ -31,10 +31,13 @@ exports.getBloodRequestByID = async(getAuthID, requestID) => {
   const { data, error } = await db
   .from('blood_request')
   .select('*')
-  .eq('user_id', getAuthID)
+  // .eq('user_id', getAuthID)
   .eq('id', requestID)
+  // .single()
+
+  console.log(data[0])
   
-  if(data.length === 0) throw { message: "RequestID not found", statusCode: 404 };
+  // if(data.length === 0) throw { message: "RequestID not found", statusCode: 404 };
   if(error) throw error;
   return data[0];
 }
@@ -48,7 +51,7 @@ exports.getBloodRequestedList = async(getAuthID) => {
 
   if(error) throw error;
   if(data.length === 0) throw { message: "Request list not found", statusCode: 404 };
-  return data[0];
+  return data;
 }
 
 exports.deleteBloodRequestedByID = async(getAuthID, requestID) => {
