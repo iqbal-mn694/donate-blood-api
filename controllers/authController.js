@@ -5,7 +5,6 @@ const asyncWrapper = require('../libs/asyncWrapper');
 const { registerValidation } = require('../validation/registerValidation');
 const { loginValidation } = require('../validation/loginValidation');
 
-// controller for handle register
 exports.register = asyncWrapper (async (req, res, next) => {
     const validateInput = await registerValidation(req);
     
@@ -17,6 +16,7 @@ exports.register = asyncWrapper (async (req, res, next) => {
             password: req.body.password,
             options: {
                 data: {
+                    username: req.body.username,
                     first_name: req.body.firstName,
                     last_name: req.body.lastName
                 }
@@ -25,9 +25,8 @@ exports.register = asyncWrapper (async (req, res, next) => {
         
     if(error) throw error; // bug
     res.status(201).json({ success: true, status: 201, message: 'Register has been successfully', data })
-})
+});
 
-// controller for handle login
 exports.login = asyncWrapper (async (req, res, next) => {
     const validateInput = await loginValidation(req);
 
@@ -42,5 +41,19 @@ exports.login = asyncWrapper (async (req, res, next) => {
     const accessToken = data.session.access_token;
     res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data: {
         token: accessToken} })   
-})
+});
+
+exports.logout = asyncWrapper (async (req, res) => {
+   const { error } = await supabase.auth.signOut();
+
+   if(error) throw error;
+   res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
+});
+
+exports.verify = asyncWrapper (async (req, res) => {
+    const { data, error } = supabase.auth.verifyOtp({ email, token, type: 'email'});
+
+    if(error) throw error;
+    res.status(200).json({ success: true, status: 200, message: 'Account has been verified', data: data }) 
+});
 

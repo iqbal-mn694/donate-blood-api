@@ -34,7 +34,7 @@ const options = {
 
 const spec = swaggerDoc(options)
 
-const app = express()
+const app = express();
 
 // use middleware
 app.use(cors());
@@ -54,4 +54,6 @@ app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(spec))
 
 app.use(errorHandler)
 
-app.listen(PORT, "0.0.0.0", () => console.log(`Running on port ${PORT}!`))
+app.listen(PORT, "0.0.0.0", () => console.log(`Running on port ${PORT}!`));
+
+module.exports = app;

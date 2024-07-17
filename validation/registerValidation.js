@@ -12,7 +12,7 @@ exports.registerValidation = async (req) => {
       toLowerCase: true,
       custom: {
         options: async (email) =>  {
-          const { data: isEmailUsed } = await supabase.rpc('is_email_used', { user_email: email })
+          const { data: isEmailUsed } = await supabase.rpc('is_email_used', { user_email: email });
 
           if(isEmailUsed) throw { email: 'E-mail already in use' };
       }}

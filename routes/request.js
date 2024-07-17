@@ -186,9 +186,6 @@ router.post('/', auth, makeBloodRequest);
 */
 router.get('/', auth, getBloodRequests);
 
-
-
-
 /**
  * @swagger
  * /api/v1/requests/{requestID}:
@@ -426,7 +423,7 @@ router.delete('/:requestID', auth, deleteBloodRequest);
  *      500:
  *        description: Internal server error
 */
-router.delete('/', auth, clearBloodRequest);
+router.delete('/', auth, clearBloodRequest); 
 
 
 

@@ -1,9 +1,7 @@
 const express = require('express');
-
 const router = express.Router()
 
-const { register,login } = require('../controllers/authController');
-const { check } = require('express-validator');
+const { register,login, logout, verify } = require('../controllers/authController');
 const { validateInput } = require('../middleware/validator');
 const supabase = require('../models/dbConnection');
     
@@ -108,5 +106,9 @@ router.post('/register', register);
  *        description: Internal server error
 */
 router.post('/login', login);
+
+router.get('/logout', logout);
+
+router.get('/verify-email', verify)
 
 module.exports = router;
