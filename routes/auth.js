@@ -25,10 +25,6 @@ const supabase = require('../models/dbConnection');
  *          schema:
  *            type: object
  *            properties:
- *             name:
- *              type: string,
- *              description: Name,
- *              example: Asep
  *             username:
  *              type: string,
  *              description: Username
@@ -52,10 +48,10 @@ const supabase = require('../models/dbConnection');
  *                  type: uuid
  *                  description: uuid user
  *                  example: f25678393huwdnd2
- *                name:
- *                  type: string
- *                  description: Name
- *                  example: Asep
+ *                username:
+ *                  type: string,
+ *                  description: Username
+ *                  example: asep234
  *                email:
  *                  type: string,
  *                  description: Email address
@@ -107,7 +103,7 @@ router.post('/register', register);
 */
 router.post('/login', login);
 
-router.get('/logout', logout);
+router.delete('/logout', logout);
 
 router.get('/verify-email', verify)
 

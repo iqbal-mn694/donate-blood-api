@@ -83,3 +83,4 @@ describe('POST /api/v1/auth/login', () => {
       expect(result.body.messages).toBeDefined()
   });
 })
+
