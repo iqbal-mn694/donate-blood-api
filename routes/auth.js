@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router()
 
-const { register,login, logout, verify } = require('../controllers/authController');
+const { register,login, logout, verify, me } = require('../controllers/authController');
 const { validateInput } = require('../middleware/validator');
 const supabase = require('../models/dbConnection');
+const { auth } = require('../middleware/auth');
     
 /**
  * @swagger
@@ -103,8 +104,64 @@ router.post('/register', register);
 */
 router.post('/login', login);
 
+/**
+ * @swagger
+ * /api/v1/auth/logout:
+ *  delete:
+ *    summary: Logout user
+ *    tags: [Auth]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - name: Authorization
+ *        in: header
+ *        required: true
+ *        description: Bearer token
+ *        schema: 
+ *          type: string
+ *          example: input_bearer_token
+ *    responses:
+ *      200:
+ *        description: User Berhasil Lpgout
+ *      401:
+ *        description: User is not authenticated 
+ *      500:
+ *        description: Internal server error
+*/
 router.delete('/logout', logout);
 
 router.get('/verify-email', verify)
+
+/**
+ * @swagger
+ * /api/v1/auth/me:
+ *  get:
+ *    summary: Detail akun user
+ *    tags: [Auth]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - name: Authorization
+ *        in: header
+ *        required: true
+ *        description: Bearer token
+ *        schema: 
+ *          type: string
+ *          example: input_bearer_token
+ *    responses:
+ *      200:
+ *        description: Berhasil mendapatkan detail akun user
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                
+ *      401:
+ *        description: User is not authenticated 
+ *      500:
+ *        description: Internal server error
+*/
+router.get('/me', auth, me)
 
 module.exports = router;

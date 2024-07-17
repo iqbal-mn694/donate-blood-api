@@ -4,6 +4,7 @@ const supabase = require('../models/dbConnection');
 const asyncWrapper = require('../libs/asyncWrapper');
 const { registerValidation } = require('../validation/registerValidation');
 const { loginValidation } = require('../validation/loginValidation');
+const { options } = require('..');
 
 exports.register = asyncWrapper (async (req, res, next) => {
     const validateInput = await registerValidation(req);
@@ -16,9 +17,7 @@ exports.register = asyncWrapper (async (req, res, next) => {
             password: req.body.password,
             options: {
                 data: {
-                    username: req.body.username,
-                    first_name: req.body.firstName,
-                    last_name: req.body.lastName
+                    username: req.body.username
                 }
             }
         })
@@ -33,7 +32,12 @@ exports.login = asyncWrapper (async (req, res, next) => {
     if(validateInput && validateInput.length !== 0) throw { status: 422, messages: validateInput };
     const { data, error } = await supabase.auth.signInWithPassword({
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        options: {
+            data: {
+                username: req.body.username
+            }
+        }
     })
         
     if(error) throw { status: 401, message: 'Invalid Login Credentials'};
@@ -55,5 +59,9 @@ exports.verify = asyncWrapper (async (req, res) => {
 
     if(error) throw error;
     res.status(200).json({ success: true, status: 200, message: 'Account has been verified', data: data }) 
+});
+
+exports.me = asyncWrapper (async (req, res) => {
+    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: req.user });
 });
 
