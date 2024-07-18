@@ -39,24 +39,58 @@ const { auth } = require('../middleware/auth');
  *              description: Password minimal 8 karakter
  *    responses:
  *      201:
- *        description: Berhasil registrasi
+ *        description: Berhasil Registrasi user
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              properties:
- *                id:
- *                  type: uuid
- *                  description: uuid user
- *                  example: f25678393huwdnd2
- *                username:
- *                  type: string,
- *                  description: Username
- *                  example: asep234
- *                email:
- *                  type: string,
- *                  description: Email address
- *                  example: asep12@example.com  
+ *                data:
+ *                  type: object
+ *                  properties:
+ *                    id: 
+ *                      type: uuid
+ *                      description: uuid
+ *                      example: f25678393huwdnd2
+ *                    email:
+ *                      type: string
+ *                      description: Email address
+ *                      example: asep12@gmail.com
+ *                    phone:
+ *                      type: string
+ *                      description: Nomor telepon
+ *                      example: ""
+ *                    user:
+ *                      type: object
+ *                      properties:
+ *                        username: 
+ *                          type: string
+ *                          description: Username
+ *                          example: asep234
+ *                        first_name: 
+ *                          type: string
+ *                          description: Nama depan
+ *                          example: ""
+ *                        last_name: 
+ *                          type: string
+ *                          description: Nama belakang
+ *                          example: ""
+ *                        birthdate: 
+ *                          type: date
+ *                          description: Tanggal lahir
+ *                          example: ""
+ *                        address: 
+ *                          type: string
+ *                          description: Alamat rumah
+ *                          example: ""
+ *                        gender: 
+ *                          type: enum
+ *                          description: Jenis Kelamin
+ *                          example: ""
+ *                        blood_type: 
+ *                          type: enum
+ *                          description: Tipe darah
+ *                          example: ""
  *      401:
  *        description: unauthorized
  *      500:
@@ -156,8 +190,52 @@ router.get('/verify-email', verify)
  *            schema:
  *              type: object
  *              properties:
- *                
- *                
+ *                data:
+ *                  type: object
+ *                  properties:
+ *                    id: 
+ *                      type: uuid
+ *                      description: uuid
+ *                      example: f25678393huwdnd2
+ *                    email:
+ *                      type: string
+ *                      description: Email address
+ *                      example: asep12@gmail.com
+ *                    phone:
+ *                      type: string
+ *                      description: Nomor telepon
+ *                      example: 085211119922
+ *                    user:
+ *                      type: object
+ *                      properties:
+ *                        username: 
+ *                          type: string
+ *                          description: Username
+ *                          example: asep123
+ *                        first_name: 
+ *                          type: string
+ *                          description: Nama depan
+ *                          example: Asep
+ *                        last_name: 
+ *                          type: string
+ *                          description: Nama belakang
+ *                          example: Kasep
+ *                        birthdate: 
+ *                          type: date
+ *                          description: Tanggal lahir
+ *                          example: 06-09-2003
+ *                        address: 
+ *                          type: string
+ *                          description: Alamat rumah
+ *                          example: Jln.Tamansari No.30, Kota Tasikmalaya
+ *                        gender: 
+ *                          type: enum
+ *                          description: Jenis Kelamin
+ *                          example: Laki-laki
+ *                        blood_type: 
+ *                          type: enum
+ *                          description: Tipe darah
+ *                          example: A
  *      401:
  *        description: User is not authenticated 
  *      500:
@@ -171,6 +249,16 @@ router.get('/me', auth, me)
  *  put:
  *    summary: Update user
  *    tags: [Auth]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - name: Authorization
+ *        in: header
+ *        required: true
+ *        description: Bearer token
+ *        schema: 
+ *          type: string
+ *          example: input_bearer_token
  *    requestBody:
  *      content:
  *        application/json:
@@ -216,38 +304,41 @@ router.get('/me', auth, me)
  *            schema:
  *              type: object
  *              properties:
- *                id:
- *                  type: uuid
- *                  description: uuid user
- *                  example: f25678393huwdnd2
- *                username:
- *                  type: string
- *                  description: Username
- *                  example: asep123
- *                email:
- *                  type: string,
- *                  description: Email address
- *                  example: asep12@gmail.com
- *                firstName:
- *                  type: string
- *                  description: Nama depan
- *                  example: asep
- *                lastName:
- *                  type: string
- *                  description: Nama belakang
- *                  example: ganteng
- *                birthdate:
- *                  type: date
- *                  description: Tanggal lahir
- *                  example: 06-02-2003
- *                gender:
- *                  type: enum
- *                  description: Jenis kelamin
- *                  example: Laki-laki
- *                bloodType:
- *                  type: enum
- *                  description: Golongan darah
- *                  example: A  
+ *                data:
+ *                  type: object
+ *                  properties:
+ *                    id:
+ *                      type: uuid
+ *                      description: uuid user
+ *                      example: f25678393huwdnd2
+ *                    username:
+ *                      type: string
+ *                      description: Username
+ *                      example: asep123
+ *                    email:
+ *                      type: string,
+ *                      description: Email address
+ *                      example: asep12@gmail.com
+ *                    firstName:
+ *                      type: string
+ *                      description: Nama depan
+ *                      example: asep
+ *                    lastName:
+ *                      type: string
+ *                      description: Nama belakang
+ *                      example: ganteng
+ *                    birthdate:
+ *                      type: date
+ *                      description: Tanggal lahir
+ *                      example: 06-02-2003
+ *                    gender:
+ *                      type: enum
+ *                      description: Jenis kelamin
+ *                      example: Laki-laki
+ *                    bloodType:
+ *                      type: enum
+ *                      description: Golongan darah
+ *                      example: A  
  *      401:
  *        description: unauthorized
  *      500:
