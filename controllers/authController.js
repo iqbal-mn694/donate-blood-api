@@ -65,3 +65,21 @@ exports.me = asyncWrapper (async (req, res) => {
     res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: req.user });
 });
 
+exports.edit = asyncWrapper (async (req, res) => {
+    const { data, error } = await supabase.auth.updateUser({
+        email: req.body.email,
+        password: req.body.password,
+        data: {
+            username: req.body.username,
+            first_name: req.body.firstName,
+            last_name: req.body.lastName,
+            birthdate: req.body.birthdate,
+            gender: req.body.gender,
+            blood_type: req.body.bloodType
+        }
+    });
+
+    if(error) throw error;
+    res.status(200).json({ success: true, status: 200, message: 'User has been updated', data: data })
+});
+

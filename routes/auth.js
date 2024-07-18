@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const { register,login, logout, verify, me } = require('../controllers/authController');
+const { register,login, logout, verify, me, edit } = require('../controllers/authController');
 const { validateInput } = require('../middleware/validator');
 const supabase = require('../models/dbConnection');
 const { auth } = require('../middleware/auth');
@@ -107,7 +107,7 @@ router.post('/login', login);
 /**
  * @swagger
  * /api/v1/auth/logout:
- *  delete:
+ *  post:
  *    summary: Logout user
  *    tags: [Auth]
  *    security:
@@ -128,7 +128,7 @@ router.post('/login', login);
  *      500:
  *        description: Internal server error
 */
-router.delete('/logout', logout);
+router.post('/logout', logout);
 
 router.get('/verify-email', verify)
 
@@ -157,11 +157,102 @@ router.get('/verify-email', verify)
  *              type: object
  *              properties:
  *                
+ *                
  *      401:
  *        description: User is not authenticated 
  *      500:
  *        description: Internal server error
 */
 router.get('/me', auth, me)
+
+/**
+ * @swagger
+ * /api/v1/auth/me:
+ *  put:
+ *    summary: Update user
+ *    tags: [Auth]
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              username:
+ *                type: string
+ *                description: Username
+ *                example: asep123
+ *              email:
+ *                type: string,
+ *                description: Email address
+ *                example: asep12@gmail.com
+ *              password: 
+ *                type: string
+ *                description: Password minimal 8 karakter
+ *              firstName:
+ *                type: string
+ *                description: Nama depan
+ *                example: asep
+ *              lastName:
+ *                type: string
+ *                description: Nama belakang
+ *                example: ganteng
+ *              birthdate:
+ *                type: date
+ *                description: Tanggal lahir
+ *                example: 06-02-2003
+ *              gender:
+ *                type: enum
+ *                description: Jenis kelamin
+ *                example: Laki-laki
+ *              bloodType:
+ *                type: enum
+ *                description: Golongan darah
+ *                example: A
+ *    responses:
+ *      200:
+ *        description: Berhasil memperbarui akun
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                id:
+ *                  type: uuid
+ *                  description: uuid user
+ *                  example: f25678393huwdnd2
+ *                username:
+ *                  type: string
+ *                  description: Username
+ *                  example: asep123
+ *                email:
+ *                  type: string,
+ *                  description: Email address
+ *                  example: asep12@gmail.com
+ *                firstName:
+ *                  type: string
+ *                  description: Nama depan
+ *                  example: asep
+ *                lastName:
+ *                  type: string
+ *                  description: Nama belakang
+ *                  example: ganteng
+ *                birthdate:
+ *                  type: date
+ *                  description: Tanggal lahir
+ *                  example: 06-02-2003
+ *                gender:
+ *                  type: enum
+ *                  description: Jenis kelamin
+ *                  example: Laki-laki
+ *                bloodType:
+ *                  type: enum
+ *                  description: Golongan darah
+ *                  example: A  
+ *      401:
+ *        description: unauthorized
+ *      500:
+ *        description: internal server error
+*/
+router.put('/me', auth, edit);
 
 module.exports = router;

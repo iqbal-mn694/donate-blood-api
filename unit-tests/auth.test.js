@@ -98,6 +98,8 @@ describe('DELETE /api/v1/auth/logout', () => {
     const result = await supertest(app)
       .delete('/api/v1/auth/logout')
       .set('Authorization', `Bearer ${token}`);
+  });
+
 });
 
 describe('GET /api/v1/auth/me', () => {
@@ -123,4 +125,33 @@ describe('GET /api/v1/auth/me', () => {
   })
 });
 
-})
+describe('PUT /api/v1/auth/me', () => {
+  let token;
+  beforeEach(async () => {
+    const { data, error } = await db.auth.signInWithPassword({
+      email: 'forthis345@gmail.com',
+      password: '112233445566'
+    });
+
+    if(error) throw error;
+    token = data.session.access_token;
+  });
+
+    
+  it('should can update user preferences', async () => {
+    const result = await supertest(app)
+      .put('/api/v1/auth/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        firstName: 'Iqbal',
+        lastName: 'kasep',
+        gender: 'Laki-Laki',
+        bloodType: 'A'
+      })
+
+    expect(result.status).toBe(200);
+    expect(result.body.data.user).toBeDefined();
+    console.log(result.body.data.user);
+  })
+});
+
