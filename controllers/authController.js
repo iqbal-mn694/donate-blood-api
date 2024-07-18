@@ -1,9 +1,9 @@
- const { validationResult } = require('express-validator')
 const supabase = require('../models/dbConnection');
 const asyncWrapper = require('../libs/asyncWrapper');
 const { registerValidation } = require('../validation/registerValidation');
 const { loginValidation } = require('../validation/loginValidation');
-const { options } = require('..');
+
+const jwt = require('jsonwebtoken');
 
 exports.register = asyncWrapper (async (req, res, next) => {
     const validateInput = await registerValidation(req);
@@ -39,9 +39,10 @@ exports.login = asyncWrapper (async (req, res, next) => {
     })
         
     if(error) throw { status: 401, message: 'Invalid Login Credentials'};
-        
-    const accessToken = data.session.access_token;
-    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data })   
+
+    const { user_metadata: user } = data.user;
+    const accessToken = jwt.sign(user, process.env.JWT_KEY, { expiresIn: '1h'})
+    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data: user, accessToken })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
@@ -59,7 +60,7 @@ exports.verify = asyncWrapper (async (req, res) => {
 });
 
 exports.me = asyncWrapper (async (req, res) => {
-    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: { email: req.user.email, phone: req.user.phone, user: req.user.user_metadata} });
+    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: req.user });
 });
 
 exports.edit = asyncWrapper (async (req, res) => {
