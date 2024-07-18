@@ -1,5 +1,4 @@
-// make connection to database 
-const { validationResult } = require('express-validator')
+ const { validationResult } = require('express-validator')
 const supabase = require('../models/dbConnection');
 const asyncWrapper = require('../libs/asyncWrapper');
 const { registerValidation } = require('../validation/registerValidation');
@@ -9,7 +8,6 @@ const { options } = require('..');
 exports.register = asyncWrapper (async (req, res, next) => {
     const validateInput = await registerValidation(req);
     
-    // console.log(validateInput === true)
     if(validateInput && validateInput.length !== 0) throw { status: 422, messages: validateInput } // bug
 
     const { data, error } = await supabase.auth.signUp({
@@ -20,7 +18,7 @@ exports.register = asyncWrapper (async (req, res, next) => {
                     username: req.body.username
                 }
             }
-        })
+        });
         
     if(error) throw error; // bug
     res.status(201).json({ success: true, status: 201, message: 'Register has been successfully', data })
@@ -43,8 +41,7 @@ exports.login = asyncWrapper (async (req, res, next) => {
     if(error) throw { status: 401, message: 'Invalid Login Credentials'};
         
     const accessToken = data.session.access_token;
-    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data: {
-        token: accessToken} })   
+    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
