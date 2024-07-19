@@ -57,7 +57,7 @@ app.use(session({
   secret: process.env.SESSION_KEY,
   cookie: {
     maxAge: 1000 * 60 * 60,
-    sameSite: 'lax',
+    sameSite: 'none',
     secure: false,
   }
 }));
