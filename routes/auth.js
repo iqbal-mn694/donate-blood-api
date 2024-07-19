@@ -4,7 +4,7 @@ const router = express.Router()
 const { register,login, logout, verify, me, edit } = require('../controllers/authController');
 const { validateInput } = require('../middleware/validator');
 const supabase = require('../models/dbConnection');
-const { auth } = require('../middleware/auth');
+const { auth, generateAccessToken } = require('../middleware/auth');
     
 /**
  * @swagger
@@ -345,5 +345,9 @@ router.get('/me', auth, me)
  *        description: internal server error
 */
 router.put('/me', auth, edit);
+
+router.get('/refresh-token' , generateAccessToken, (req, res) => {
+  res.sendStatus(200);
+})
 
 module.exports = router;

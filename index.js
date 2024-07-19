@@ -8,6 +8,8 @@ const swaggerDoc = require('swagger-jsdoc')
 const errorHandler = require('./middleware/errorHandler');
 const PORT = process.env.PORT || 3000;
 
+const cookieSession = require('cookie-session');
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -45,6 +47,16 @@ app.disable('x-powered-by')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieSession({
+  name: 'session',
+  keys: [ process.env.SESSION_KEY ],
+  httpOnly: true,
+  sameSite: 'None',
+  // secure: true,
+  maxAge: 24 * 60 * 60 * 1000,
+
+}));
+
 
 // web app api endpoint
 app.use('/api/v1', require('./routes/api'));

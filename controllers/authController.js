@@ -41,8 +41,12 @@ exports.login = asyncWrapper (async (req, res, next) => {
     if(error) throw { status: 401, message: 'Invalid Login Credentials'};
 
     const { user_metadata: user } = data.user;
-    const accessToken = jwt.sign(user, process.env.JWT_KEY, { expiresIn: '1h'})
-    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data: user, accessToken })   
+    const accessToken = jwt.sign(user, process.env.JWT_ACCESS_KEY, { expiresIn: '15m'});
+    const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_KEY, { expiresIn: "30d"});
+
+    req.session.token = accessToken;
+    req.session.refreshToken = refreshToken;
+    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data: user, accessToken, refreshToken })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
@@ -60,6 +64,7 @@ exports.verify = asyncWrapper (async (req, res) => {
 });
 
 exports.me = asyncWrapper (async (req, res) => {
+    console.log(req.cookies);
     res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: req.user });
 });
 
