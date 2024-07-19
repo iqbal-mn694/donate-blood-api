@@ -46,12 +46,14 @@ exports.login = asyncWrapper (async (req, res, next) => {
 
     req.session.token = accessToken;
     req.session.refreshToken = refreshToken;
+
     res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data: user, accessToken, refreshToken })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
 //    const { error } = await supabase.auth.signOut();
-   req,session = null
+   req,session.token = null
+   req,session.refreshToken = null
 
    if(error) throw error;
    res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
@@ -65,7 +67,6 @@ exports.verify = asyncWrapper (async (req, res) => {
 });
 
 exports.me = asyncWrapper (async (req, res) => {
-    console.log(req.cookies);
     res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: req.user });
 });
 
