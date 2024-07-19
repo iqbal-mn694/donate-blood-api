@@ -162,7 +162,7 @@ router.post('/login', login);
  *      500:
  *        description: Internal server error
 */
-router.post('/logout', auth, logout);
+router.post('/logout', logout);
 
 router.get('/verify-email', verify)
 

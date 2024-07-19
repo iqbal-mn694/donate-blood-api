@@ -50,7 +50,8 @@ exports.login = asyncWrapper (async (req, res, next) => {
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
-   const { error } = await supabase.auth.signOut();
+//    const { error } = await supabase.auth.signOut();
+   req,session = null
 
    if(error) throw error;
    res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
