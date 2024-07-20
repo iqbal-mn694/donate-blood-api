@@ -61,7 +61,9 @@ app.use(session({
     maxAge: 1000 * 60 * 60,
     sameSite: 'none',
     secure: false,
-    partitioned: true
+    httpOnly: true,
+    path: '/',
+    domain: 'https://donate-blood-api-development.up.railway.app'
   }
 }));
 
