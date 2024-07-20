@@ -63,7 +63,7 @@ app.use(session({
     secure: false,
     httpOnly: true,
     path: '/',
-    domain: 'donate-blood-api-development.up.railway.app'
+    // domain: 'donate-blood-api-development.up.railway.app'
   }
 }));
 

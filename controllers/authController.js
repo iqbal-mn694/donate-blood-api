@@ -38,7 +38,10 @@ exports.login = asyncWrapper (async (req, res, next) => {
         }
     })
         
-    if(error) throw { status: 401, message: 'Invalid Login Credentials'};
+    if(error){
+        req.session.accessToken = null;
+        req.session.refreshToken = null;
+        throw { status: 401, message: 'Invalid Login Credentials'}};
 
     const { user_metadata: user } = data.user;
     const accessToken = jwt.sign(user, process.env.JWT_ACCESS_KEY, { expiresIn: '15m'});
@@ -47,16 +50,17 @@ exports.login = asyncWrapper (async (req, res, next) => {
     req.session.token = accessToken;
     req.session.refreshToken = refreshToken;
 
-    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', data: user, accessToken, refreshToken })   
+    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', user, accessToken, refreshToken })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
 //    const { error } = await supabase.auth.signOut();
-   req,session.token = null
-   req,session.refreshToken = null
 
-   if(error) throw error;
-   res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
+    req.session.token = null;
+    req.session.refreshToken = null;
+    req.session.destroy();
+    req.clearCookie('connect.sid');
+    res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
 });
 
 exports.verify = asyncWrapper (async (req, res) => {
@@ -67,7 +71,7 @@ exports.verify = asyncWrapper (async (req, res) => {
 });
 
 exports.me = asyncWrapper (async (req, res) => {
-    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: req.user });
+    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', token: req.user });
 });
 
 exports.edit = asyncWrapper (async (req, res) => {
@@ -80,11 +84,12 @@ exports.edit = asyncWrapper (async (req, res) => {
             last_name: req.body.lastName,
             birthdate: req.body.birthdate,
             gender: req.body.gender,
-            blood_type: req.body.bloodType
+            blood_type: req.body.bloodType,
+            
         }
     });
 
     if(error) throw error;
-    res.status(200).json({ success: true, status: 200, message: 'User has been updated', data: data })
+    res.status(200).json({ success: true, status: 200, message: 'User has been updated', data: data})
 });
 
