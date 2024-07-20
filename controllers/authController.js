@@ -38,28 +38,16 @@ exports.login = asyncWrapper (async (req, res, next) => {
         }
     })
         
-    if(error){
-        req.session.accessToken = null;
-        req.session.refreshToken = null;
-        throw { status: 401, message: 'Invalid Login Credentials'}};
+    if(error) throw { success: false, status: 401, message: 'Invalid Login Credentials'};
 
     const { user_metadata: user } = data.user;
     const accessToken = jwt.sign(user, process.env.JWT_ACCESS_KEY, { expiresIn: '15m'});
     const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_KEY, { expiresIn: "30d"});
 
-    req.session.token = accessToken;
-    req.session.refreshToken = refreshToken;
-
     res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', user, accessToken, refreshToken })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
-//    const { error } = await supabase.auth.signOut();
-
-    req.session.token = null;
-    req.session.refreshToken = null;
-    req.session.destroy();
-    req.clearCookie('connect.sid');
    res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
 });
 
