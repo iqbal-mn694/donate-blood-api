@@ -60,7 +60,7 @@ exports.logout = asyncWrapper (async (req, res) => {
     req.session.refreshToken = null;
     req.session.destroy();
     req.clearCookie('connect.sid');
-    res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
+   res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
 });
 
 exports.verify = asyncWrapper (async (req, res) => {
@@ -71,7 +71,7 @@ exports.verify = asyncWrapper (async (req, res) => {
 });
 
 exports.me = asyncWrapper (async (req, res) => {
-    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', token: req.user });
+    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: req.user });
 });
 
 exports.edit = asyncWrapper (async (req, res) => {
