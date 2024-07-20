@@ -59,7 +59,7 @@ exports.verify = asyncWrapper (async (req, res) => {
 });
 
 exports.me = asyncWrapper (async (req, res) => {
-    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data: req.user });
+    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', user: req.user });
 });
 
 exports.edit = asyncWrapper (async (req, res) => {
