@@ -40,7 +40,9 @@ exports.login = asyncWrapper (async (req, res, next) => {
         
     if(error) throw { success: false, status: 401, message: 'Invalid Login Credentials'};
 
-    const { user_metadata: user } = data.user;
+    const { user: { user_metadata, id }} = data;
+    const user = { id, ...user_metadata }
+
     const accessToken = jwt.sign(user, process.env.JWT_ACCESS_KEY, { expiresIn: '15m'});
     const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_KEY, { expiresIn: "30d"});
 

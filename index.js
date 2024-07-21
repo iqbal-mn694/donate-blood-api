@@ -8,8 +8,6 @@ const swaggerDoc = require('swagger-jsdoc')
 const errorHandler = require('./middleware/errorHandler');
 const PORT = process.env.PORT || 8000;
 
-const session = require('express-session');
-
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -38,34 +36,12 @@ const spec = swaggerDoc(options)
 
 const app = express();
 
-// use middleware
-app.use(cors({
-  origin: ["http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:3000", "http://127.0.0.1:3000"],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(xss());
 
 app.disable('x-powered-by')
-
-app.use(session({
-  resave: false,
-  saveUninitialized: false,
-  secret: process.env.SESSION_KEY,
-  cookie: {
-    maxAge: 1000 * 60 * 60,
-    sameSite: 'none',
-    secure: false,
-    httpOnly: true,
-    path: '/',
-    // domain: 'donate-blood-api-development.up.railway.app'
-  }
-}));
 
 // web app api endpoint
 app.use('/api/v1', require('./routes/api'));
@@ -77,4 +53,4 @@ app.use(errorHandler)
 
 app.listen(PORT, "0.0.0.0", () => console.log(`Running on port ${PORT}!`));
 
-module.exports = app;
+// module.exports = app;
