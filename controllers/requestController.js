@@ -19,9 +19,9 @@ exports.makeBloodRequest = asyncWrapper(async (req, res, next) => {
   if(validateInput && validateInput.length !== 0) throw { status: 422, messages: validateInput };
 
   const { id: userID } = req.user;
-  const { bloodType, quantity, hospitalName, latitude, longitude } = req.body;
+  const { bloodType, quantity, hospitalName, longitude, latitude } = req.body;
 
-  const bloodRequest = await makeBloodRequest(userID, bloodType, quantity, hospitalName, latitude, longitude);
+  const bloodRequest = await makeBloodRequest(userID, bloodType, quantity, hospitalName, longitude, latitude);
 
   res.status(201).json({ success: true, status: 201, data: bloodRequest })
 });
@@ -39,7 +39,8 @@ exports.updateBloodRequest = asyncWrapper(async (req, res) => {
 // show request blood module based on nearest location
 exports.getNearbyRecipients = asyncWrapper(async (req, res) => {
     const { lat, long } = req.query;
-    const bloodRequest = await getBloodRequest(lat, long);
+    const { id: currentUserID } = req.user;
+    const bloodRequest = await getBloodRequest(lat, long, currentUserID);
 
     res.status(200).json({ success: true, status: 200, data: bloodRequest });
 });

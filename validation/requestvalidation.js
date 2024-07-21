@@ -22,27 +22,6 @@ exports.requestValidation = async (req) => {
       }
     }
     
-    // latitude: {
-    //   isEmpty: {
-    //     negated: true,
-    //     errorMessage: 'Latitude is required'
-    //   },
-
-    //   isLatLong: {
-    //     errorMessage: 'Latitude is not valid'
-    //   }
-    // },
-
-    // longitude: {
-    //   isEmpty: {
-    //     negated: true,
-    //     errorMessage: 'Longitude is required'
-    //   },
-
-    //   isLatLong: {
-    //     errorMessage: 'Longitude is not valid'
-    //   }
-    // }
   }).run(req);
 
   // if(result.isEmpty()) next();
