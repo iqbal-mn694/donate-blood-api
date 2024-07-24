@@ -80,11 +80,13 @@ exports.clearBloodRequested = async(getAuthID) => {
   return [];
 }
 // make blood request
-exports.makeBloodRequest = async (getAuthID, bloodType, quantity, hospitalName, longitude, latitude) => {
+exports.makeBloodRequest = async (getAuthID, name, recipientAddress, bloodType, quantity, hospitalName, longitude, latitude) => {
   const { data, error } = await db
     .from('blood_request')
     .insert({
       user_id: getAuthID, // foreign key user id from table profile
+      name: name,
+      recipient_address: recipientAddress,
       blood_type: bloodType,
       quantity: quantity,
       hospital_name: hospitalName,
