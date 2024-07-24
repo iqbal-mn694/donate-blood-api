@@ -7,5 +7,6 @@ router.use('/auth', require('./auth'));
 router.use('/requests', require('./request'));
 router.use('/donate', require('./donate'));
 router.use('/donation', require('./donation'));
+router.use('/history', require('./history'));
 
 module.exports = router;

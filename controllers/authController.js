@@ -1,15 +1,18 @@
-const supabase = require('../models/dbConnection');
 const asyncWrapper = require('../libs/asyncWrapper');
+const supabase = require('../models/dbConnection');
+const jwt = require('jsonwebtoken');
 const { registerValidation } = require('../validation/registerValidation');
 const { loginValidation } = require('../validation/loginValidation');
+const { generateJWT } = require('../libs/makeJWT');
 
-const jwt = require('jsonwebtoken');
+const JWT_ACCESS_KEY = process.env.JWT_ACCESS_KEY;
+const JWT_REFRESH_KEY = process.env.JWT_REFRESH_KEY;
+
 
 exports.register = asyncWrapper (async (req, res, next) => {
     const validateInput = await registerValidation(req);
     
     if(validateInput && validateInput.length !== 0) throw { status: 422, messages: validateInput } // bug
-
     const { data, error } = await supabase.auth.signUp({
             email: req.body.email,
             password: req.body.password,
@@ -39,12 +42,11 @@ exports.login = asyncWrapper (async (req, res, next) => {
     })
         
     if(error) throw { success: false, status: 401, message: 'Invalid Login Credentials'};
-
     const { user: { user_metadata, id }} = data;
     const user = { id, ...user_metadata }
 
-    const accessToken = jwt.sign(user, process.env.JWT_ACCESS_KEY, { expiresIn: '15m'});
-    const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_KEY, { expiresIn: "30d"});
+    const accessToken = generateJWT(user, JWT_ACCESS_KEY, "15m");
+    const refreshToken = generateJWT(user, JWT_REFRESH_KEY, "30d");
 
     res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', user, accessToken, refreshToken })   
 });

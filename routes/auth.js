@@ -1,9 +1,9 @@
 const express = require('express');
+const supabase = require('../models/dbConnection');
 const router = express.Router()
 
 const { register,login, logout, verify, me, edit } = require('../controllers/authController');
 const { validateInput } = require('../middleware/validator');
-const supabase = require('../models/dbConnection');
 const { auth, generateAccessToken } = require('../middleware/auth');
     
 /**
