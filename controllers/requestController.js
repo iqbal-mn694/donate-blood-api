@@ -8,7 +8,10 @@ const {
   deleteBloodRequestedByID,
   clearBloodRequested,
   updateBloodRequestedByID,
-  getRecipient } = require('../models/BloodRequest');
+  getRecipient, 
+  getBloodRequestsByNearest,
+  getBloodRequests,
+  getRequestsByNearest} = require('../models/BloodRequest');
 const { requestValidation } = require('../validation/requestvalidation');
 
 
@@ -37,14 +40,24 @@ exports.updateBloodRequest = asyncWrapper(async (req, res) => {
   res.status(200).json({ success: true, status: 200, data: update });
 })
 
+// get all request
+exports
+
 // show request blood module based on nearest location
 exports.getNearbyRecipients = asyncWrapper(async (req, res) => {
     const { lat, long } = req.query;
     const { id: currentUserID } = req.user;
-    const bloodRequest = await getBloodRequest(lat, long, currentUserID);
+    const bloodRequest = await getRequestsByNearest(lat, long, currentUserID);
 
     res.status(200).json({ success: true, status: 200, data: bloodRequest });
 });
+
+exports.getRecipients = asyncWrapper(async (req, res) => {
+    const recipients = await getBloodRequests()
+
+    res.status(200).json({ success: true, status: 200, data: recipients });
+});
+
 
 // get blood requested byID
 exports.getRecipient = asyncWrapper(async (req, res) => {
@@ -53,6 +66,16 @@ exports.getRecipient = asyncWrapper(async (req, res) => {
 
   res.status(200).json({ success: true, status: 200, data: bloodRequestedByID });
 });
+
+
+
+
+
+
+
+
+
+
 
 // get blood requested byID
 exports.getBloodRequest = asyncWrapper(async (req, res) => {
@@ -63,7 +86,7 @@ exports.getBloodRequest = asyncWrapper(async (req, res) => {
   res.status(200).json({ success: true, status: 200, data: bloodRequestedByID });
 });
 
-// show blood requested
+// show blood requested by user id
 exports.getBloodRequests = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const bloodRequestedList = await getBloodRequestedList(userID);

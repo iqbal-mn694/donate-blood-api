@@ -10,7 +10,8 @@ const {
   clearBloodRequest,
   getNearbyRecipients,
   getRecipient, 
-  getBloodRequest} = require('../controllers/requestController');
+  getBloodRequest,
+  getRecipients} = require('../controllers/requestController');
 
 /**
  * @swagger
@@ -257,6 +258,9 @@ router.get('/', auth, getBloodRequests);
 */
 router.get('/:requestID', auth, getBloodRequest);
 
+
+router.get('/recipients', auth, getRecipients);
+
 /**
  * @swagger
  * /api/v1/requests:
@@ -427,8 +431,6 @@ router.delete('/', auth, clearBloodRequest);
 
 
 
-
-
 /**
  * @swagger
  * tags:
@@ -510,7 +512,7 @@ router.get('/recipients/nearby', auth, getNearbyRecipients);
 
 /**
  * @swagger
- * /api/v1/{requestID}/recipients:
+ * /api/v1/recipients/{requestID}:
  *  get:
  *    summary: Menampilkan detail request penerima darah
  *    tags: [Recipients]
@@ -577,6 +579,6 @@ router.get('/recipients/nearby', auth, getNearbyRecipients);
  *      500:
  *        description: Internal server error
 */
-router.get('/:requestID/recipients', auth, getRecipient);
+router.get('/recipients/:requestID', auth, getRecipient);
 
 module.exports = router;

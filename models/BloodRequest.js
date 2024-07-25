@@ -2,7 +2,7 @@ const db = require("./dbConnection");
 
 
 // find nearby request location with coordinates (latitude and longitude)
-exports.getBloodRequest = async (lat, long, currentUserID) => {
+exports.getRequestsByNearest = async (lat, long, currentUserID) => {
   const { data, error } = await db.rpc('nearby_request', {        
       lat: lat,  
       long: long,
@@ -15,6 +15,14 @@ exports.getBloodRequest = async (lat, long, currentUserID) => {
     return data;
 }
 
+exports.getBloodRequests = async () => {
+  const { data, error } = await db
+    .from('blood_request')
+    .select('*')
+
+    if(error) throw error;
+    return data;
+}
 // find nearby request location with coordinates (latitude and longitude) in detail
 exports.getRecipient = async (requestID) => {
   const { data, error } = await db
