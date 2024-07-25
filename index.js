@@ -53,6 +53,7 @@ app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(spec))
 
 app.use(errorHandler)
 
+
 app.listen(PORT, "0.0.0.0", () => console.log(`Running on port ${PORT}!`));
 
-// module.exports = app;
+module.exports = app;

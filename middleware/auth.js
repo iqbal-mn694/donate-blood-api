@@ -10,7 +10,21 @@ exports.auth = async(req, res, next) => {
     
     try {
         if(!token) throw { messages: 'User not authenticated or not valid access token', statusCode: 401}
-        req.user = await verifyJWT(token, JWT_ACCESS_KEY);
+        let decoded = await verifyJWT(token, JWT_ACCESS_KEY);
+        const user = {
+            id: decoded.id,
+            username: decoded.username,
+            email: decoded.email,
+            phone: decoded?.phone || null,
+            first_name: decoded?.first_name || null,
+            last_name: decoded?.last_name || null,
+            address: decoded?.address || null,
+            birthdate: decoded?.birthdate || null,
+            blood_type: decoded?.blood_type || null,
+            gender: decoded?.gender || null,
+        }
+
+        req.user = user;
         next();
     } catch (error) {
         next(error);
