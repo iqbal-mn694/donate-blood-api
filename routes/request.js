@@ -20,6 +20,7 @@ const {
  *  description: Blood request apis
  */
 
+router.get('/recipients', auth, getRecipients);
 
 /**
  * @swagger
@@ -258,8 +259,6 @@ router.get('/', auth, getBloodRequests);
 */
 router.get('/:requestID', auth, getBloodRequest);
 
-
-router.get('/recipients', auth, getRecipients);
 
 /**
  * @swagger
