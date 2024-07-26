@@ -1,8 +1,10 @@
 const asyncWrapper = require("../libs/asyncWrapper");
+const db = require("../models/dbConnection")
 
 const { getBloodRequestByID, updateRequestStatus } = require("../models/BloodRequest");
 const { countDonationByRequestID, insertDonation } = require("../models/Donation");
 const { insertDonor } = require("../models/Donor");
+
 
 // donate blood by request ID
 exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
@@ -22,8 +24,7 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
   }
   // if fulfiled change status to fulfiled 
   const changeRequestStatus = await updateRequestStatus(requestID);
-
-res.status(200).json({ success: true, status: 200, message: 'Request status is fulfiled', data: changeRequestStatus })
+  res.status(200).json({ success: true, status: 200, message: 'Request status is fulfiled', data: changeRequestStatus })
 })
 
 exports.donateBlood = asyncWrapper(async (req, res) => {

@@ -77,6 +77,7 @@ exports.edit = asyncWrapper (async (req, res) => {
             birthdate: req.body.birthdate,
             gender: req.body.gender,
             blood_type: req.body.bloodType,
+            profile_image: `Uploads/${req.file.filename}`
             
         }
     });

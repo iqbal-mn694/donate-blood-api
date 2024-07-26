@@ -5,6 +5,7 @@ const router = express.Router()
 const { register,login, logout, verify, me, edit } = require('../controllers/authController');
 const { validateInput } = require('../middleware/validator');
 const { auth, generateAccessToken } = require('../middleware/auth');
+const imageUpload = require('../middleware/imageUpload')
     
 /**
  * @swagger
@@ -344,7 +345,7 @@ router.get('/me', auth, me)
  *      500:
  *        description: internal server error
 */
-router.put('/me', auth, edit);
+router.put('/me', auth, imageUpload.single('image'), edit);
 
 router.get('/refresh-token' , generateAccessToken, (req, res) => {
   res.sendStatus(200);
