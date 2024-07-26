@@ -1,7 +1,8 @@
 const asyncWrapper = require("../libs/asyncWrapper");
+const { getBloodRecipients, getRecipientsByNearest, getRecipient } = require("../models/BloodRecipient");
 
 exports.getRecipients = asyncWrapper(async (req, res) => {
-  const recipients = await getBloodRequests()
+  const recipients = await getBloodRecipients()
 
   res.status(200).json({ success: true, status: 200, data: recipients });
 });

@@ -156,3 +156,5 @@ router.get('/nearby', auth, getNearbyRecipients);
  *        description: Internal server error
 */
 router.get('/:requestID', auth, getRecipient);
+
+module.exports = router;

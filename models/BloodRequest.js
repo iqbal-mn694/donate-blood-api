@@ -1,6 +1,5 @@
 const db = require("./dbConnection");
 
-
 // get blood requested by detail
 exports.getBloodRequestByID = async(getAuthID, requestID) => {
   const { data, error } = await db
