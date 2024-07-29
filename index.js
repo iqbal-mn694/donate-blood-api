@@ -7,6 +7,7 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerDoc = require('swagger-jsdoc')
 const errorHandler = require('./middleware/errorHandler');
 const path = require('path');
+const { auth } = require('./middleware/auth');
 const PORT = process.env.PORT || 8000;
 
 const options = {
@@ -48,7 +49,7 @@ app.use(xss());
 app.disable('x-powered-by')
 
 // web app api endpoint
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/uploads', auth ,express.static(path.join(__dirname, 'public/uploads')));
 
 app.use('/api/v1', require('./routes/api'));
 
