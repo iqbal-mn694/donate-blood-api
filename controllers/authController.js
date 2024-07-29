@@ -77,12 +77,20 @@ exports.edit = asyncWrapper (async (req, res) => {
             birthdate: req.body.birthdate,
             gender: req.body.gender,
             blood_type: req.body.bloodType,
-            profile_image: `Uploads/${req.file.filename}`
-            
+            profile_image: req.file && `Uploads/${req.file.filename}` 
         }
     });
 
     if(error) throw error;
     res.status(200).json({ success: true, status: 200, message: 'User has been updated', data: data})
 });
+
+exports.detail = asyncWrapper (async (req, res) => {
+    const { id: userID } = req.params; 
+
+    const { data, error } = await supabase.from('profiles').select().eq('id', userID);
+
+    if(error) throw error;
+    res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data });
+})
 

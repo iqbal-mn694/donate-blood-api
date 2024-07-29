@@ -6,6 +6,7 @@ const xss = require('xss-clean');
 const swaggerUI = require('swagger-ui-express');
 const swaggerDoc = require('swagger-jsdoc')
 const errorHandler = require('./middleware/errorHandler');
+const path = require('path');
 const PORT = process.env.PORT || 8000;
 
 const options = {
@@ -37,7 +38,7 @@ const spec = swaggerDoc(options)
 const app = express();
 
 app.use(express.json());
-app.use(express.static('public'));
+// app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cors());
@@ -47,6 +48,8 @@ app.use(xss());
 app.disable('x-powered-by')
 
 // web app api endpoint
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
 app.use('/api/v1', require('./routes/api'));
 
 // api endpoint documentation
