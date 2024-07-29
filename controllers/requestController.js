@@ -15,13 +15,10 @@ exports.makeBloodRequest = asyncWrapper(async (req, res, next) => {
   const validateInput = await requestValidation(req);
 
   if(validateInput && validateInput.length !== 0) throw { status: 422, messages: validateInput };
-
-  console.log()
   const { id: userID } = req.user;
   const { name, recipientAddress, bloodType, quantity, hospitalName, longitude, latitude } = req.body;
-
   const bloodRequest = await makeBloodRequest(userID, name, recipientAddress, bloodType, quantity, hospitalName, longitude, latitude);
-
+  
   res.status(201).json({ success: true, status: 201, data: bloodRequest })
 });
 
@@ -29,12 +26,10 @@ exports.updateBloodRequest = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const { requestID } = req.params;
   const { bloodType, quantity, hospitalName, latitude, longitude } = req.body;
-
   const update = await updateBloodRequestedByID(userID, requestID, bloodType, quantity, hospitalName, latitude, longitude);
 
   res.status(200).json({ success: true, status: 200, data: update });
 });
-
 
 
 // get blood requested byID
