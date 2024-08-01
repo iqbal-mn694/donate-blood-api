@@ -54,7 +54,7 @@ app.use('/uploads', auth ,express.static(path.join(__dirname, 'public/uploads'))
 app.use('/api/v1', require('./routes/api'));
 
 // api endpoint documentation
-app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(spec))
+app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(spec));
 
 app.use(errorHandler)
 

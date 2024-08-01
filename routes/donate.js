@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { auth } = require('../middleware/auth')
 
-const { donateBlood, donateBloodByRequestID } = require('../controllers/donateController');
+const { donateBlood, donateBloodByRequestID, detailDonor, detailDonorByRequestID, detailDonorByDonorID } = require('../controllers/donateController');
 
 /**
  * @swagger
@@ -72,19 +72,22 @@ router.post('/', auth, donateBlood);
 */
 router.post('/:requestID', auth, donateBloodByRequestID);
 
-router.get('/request-test', async(req, res) => {    
-    const test = await supabase.from('blood_request').insert(
-        {
-            user_id : "2f53ee64-2aa2-469e-aefc-479a322559b0",
-            blood_type: "A",
-            quantity: 2,
-            hospital_name: "RSUD",
-            location: 'POINT(108.25293 -7.3787595)'
-        },
-        )
+router.get('/', detailDonorByRequestID);
+router.get('/', detailDonorByDonorID);
 
-    res.send(test)
-})
+// router.get('/request-test', async(req, res) => {    
+//     const test = await supabase.from('blood_request').insert(
+//         {
+//             user_id : "2f53ee64-2aa2-469e-aefc-479a322559b0",
+//             blood_type: "A",
+//             quantity: 2,
+//             hospital_name: "RSUD",
+//             location: 'POINT(108.25293 -7.3787595)'
+//         },
+//         )
+
+//     res.send(test)
+// })
 
 
 

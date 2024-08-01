@@ -1,21 +1,5 @@
 const db = require("./dbConnection");
 
-// get blood requested by detail
-exports.getBloodRequestByID = async(getAuthID, requestID) => {
-  const { data, error } = await db
-  .from('blood_request')
-  .select('*')
-  // .eq('user_id', getAuthID)
-  .eq('id', requestID)
-  // .single()
-
-  console.log(data[0])
-  
-  // if(data.length === 0) throw { message: "RequestID not found", statusCode: 404 };
-  if(error) throw error;
-  return data[0];
-}
-
 // get blood requested list
 exports.getBloodRequestedList = async(getAuthID) => {
   const { data, error } = await db
@@ -28,6 +12,19 @@ exports.getBloodRequestedList = async(getAuthID) => {
   return data;
 }
 
+// get blood requested by detail
+exports.getBloodRequestByID = async(getAuthID, requestID) => {
+  const { data, error } = await db
+  .from('blood_request')
+  .select('*')
+  .eq('id', requestID)
+  
+  if(data.length === 0) throw { message: "RequestID not found", statusCode: 404 };
+  if(error) throw error;
+  return data[0];
+}
+
+
 exports.deleteBloodRequestedByID = async(getAuthID, requestID) => {
   const { data, error } = await db
     .from('blood_request')
@@ -36,7 +33,7 @@ exports.deleteBloodRequestedByID = async(getAuthID, requestID) => {
     .eq('id', requestID);
 
   if(error) throw error;
-  // if(!data) throw { message: "RequestID not found", statusCode: 404 };
+  if(!data) throw { message: "RequestID not found", statusCode: 404 };
   return [];
 }
 
@@ -97,6 +94,15 @@ exports.updateRequestStatus = async(requestID) => {
   
   if(error) throw error
   if(!data) throw { message: "RequestID tidak ditemukan", code: 404 };
+  // if(data.status === 'Fulfiled') throw { message: 'Recipient blood has been fulfiled'}
+  return data;
+}
+
+exports.updateFilledRequest = async(requestID) => {
+  const { data, error } = await db.rpc('increment_jumlah_terpenuhi', { request_id: requestID })
+  
+  if(error) throw error;
+  // if(!data) throw { message: "RequestID tidak ditemukan", code: 404 };
   // if(data.status === 'Fulfiled') throw { message: 'Recipient blood has been fulfiled'}
   return data;
 }

@@ -1,11 +1,12 @@
 const db = require("./dbConnection")
 
-exports.insertDonation = async(getAuthID, requestID) => {
+exports.insertDonation = async(getAuthID, requestID, donorID) => {
   const { data, error }  = await db
     .from('donation')
     .insert({
       user_id: getAuthID,
       request_id: requestID || null,
+      donor_id: donorID
     })
     .select();
 
@@ -20,8 +21,8 @@ exports.countDonationByRequestID = async (requestID) => {
       .eq('request_id', requestID)
 
       
-    if(error) throw error
-    return data[0].count
+    if(error) throw error;
+    return data[0].count;
 }
 
 exports.getDonation = async (getAuthID) => {
