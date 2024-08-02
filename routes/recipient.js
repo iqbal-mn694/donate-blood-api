@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middleware/auth');
-const { getRecipients, getNearbyRecipients, getRecipient } = require('../controllers/recipientController');
+const { getRecipients, getNearbyRecipients, getRecipient, getByFulfilledStatus } = require('../controllers/recipientController');
 
 /**
  * @swagger
@@ -11,7 +11,10 @@ const { getRecipients, getNearbyRecipients, getRecipient } = require('../control
  *  description: Recipients apis
  */
 
+// detail request yang bisa dipenuhi
+router.get('/', auth, getByFulfilledStatus);
 router.get('/', auth, getRecipients);
+
 
 /**
  * @swagger

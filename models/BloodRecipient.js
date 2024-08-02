@@ -9,6 +9,16 @@ exports.getBloodRecipients = async () => {
     return data;
 }
 
+exports.getBloodRecipientByStatus = async (status) => {
+  const { data, error } = await db
+    .from('blood_request')
+    .select('*')
+    .eq('status', status)
+
+    if(error) throw error;
+    return data;
+}
+
 // find nearby request location with coordinates (latitude and longitude)
 exports.getRecipientsByNearest = async (lat, long, currentUserID) => {
   const { data, error } = await db.rpc('nearby_request', {        

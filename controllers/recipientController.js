@@ -1,5 +1,5 @@
 const asyncWrapper = require("../libs/asyncWrapper");
-const { getBloodRecipients, getRecipientsByNearest, getRecipient } = require("../models/BloodRecipient");
+const { getBloodRecipients, getRecipientsByNearest, getRecipient, getBloodRecipientByStatus } = require("../models/BloodRecipient");
 
 exports.getRecipients = asyncWrapper(async (req, res) => {
   const recipients = await getBloodRecipients()
@@ -15,6 +15,13 @@ exports.getNearbyRecipients = asyncWrapper(async (req, res) => {
 
   res.status(200).json({ success: true, status: 200, data: nearbyRecipient });
 });
+
+exports.getByFulfilledStatus = asyncWrapper(async (req, res) => {
+  const { status } = req.query;
+  const bloodRecipientByStatus = await getBloodRecipientByStatus(status);
+
+  res.status(200).json({ success: true, status: 200, data: bloodRecipientByStatus });
+})
 
 // get blood requested byID
 exports.getRecipient = asyncWrapper(async (req, res) => {
