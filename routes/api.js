@@ -7,7 +7,7 @@ router.use('/check', require('./check'));
 router.use('/requests/recipients', require('./recipient'));
 router.use('/requests', require('./request'));
 router.use('/donate', require('./donate'));
-router.use('/donation', require('./donation'));
+router.use('/donations', require('./donation'));
 router.use('/history', require('./history'));
 
 module.exports = router;
