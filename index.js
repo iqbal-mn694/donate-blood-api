@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const xss = require('xss-clean');
+const cookieParser = require('cookie-parser');
 const swaggerUI = require('swagger-ui-express');
 const swaggerDoc = require('swagger-jsdoc')
 const errorHandler = require('./middleware/errorHandler');
@@ -45,7 +46,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(helmet());
 app.use(xss());
-
+app.use(cookieParser())
 app.disable('x-powered-by')
 
 // web app api endpoint

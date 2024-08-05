@@ -47,8 +47,13 @@ exports.login = asyncWrapper (async (req, res, next) => {
 
     const accessToken = generateJWT(user, JWT_ACCESS_KEY, "15m");
     const refreshToken = generateJWT(user, JWT_REFRESH_KEY, "30d");
+    res.cookie('jwt', refreshToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    })
 
-    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', user, accessToken, refreshToken })   
+    res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', user, accessToken })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {

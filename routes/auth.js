@@ -4,7 +4,11 @@ const router = express.Router()
 const { register, login, logout, verify, me, edit, detail } = require('../controllers/authController');
 const { validateInput } = require('../middleware/validator');
 const { auth, generateAccessToken } = require('../middleware/auth');
-const imageUpload = require('../middleware/imageUpload')
+const imageUpload = require('../middleware/imageUpload');
+const { generateJWT, verifyJWT } = require('../libs/makeJWT');
+
+const JWT_ACCESS_KEY = process.env.JWT_ACCESS_KEY;
+const JWT_REFRESH_KEY = process.env.JWT_REFRESH_KEY;
     
 /**
  * @swagger
@@ -348,8 +352,14 @@ router.get('/me/:id', auth, detail);
 */
 router.put('/me', auth, imageUpload.single('image'), edit);
 
-router.get('/refresh-token' , generateAccessToken, (req, res) => {
-  res.sendStatus(200);
+router.get('/refresh-token' , auth, async (req, res) => {
+  // const userData = req.user;
+  const refreshToken = req.cookies.jwt;
+  
+  const { exp, ...payload } = await verifyJWT(refreshToken, JWT_REFRESH_KEY)
+  const newAccessToken = generateJWT(payload, JWT_ACCESS_KEY, "15m");
+
+ res.status(200).json({ success: true, status: 200, message: 'Success get new access token', accessToken: newAccessToken })
 })
 
 module.exports = router;

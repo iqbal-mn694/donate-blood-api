@@ -17,7 +17,7 @@ exports.getNearbyRecipients = asyncWrapper(async (req, res) => {
 });
 
 exports.getByFulfilledStatus = asyncWrapper(async (req, res) => {
-  const { status } = req.query;
+  const { status } = req.query; 
   const bloodRecipientByStatus = await getBloodRecipientByStatus(status);
 
   res.status(200).json({ success: true, status: 200, data: bloodRecipientByStatus });
