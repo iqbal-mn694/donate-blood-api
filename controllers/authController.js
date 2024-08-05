@@ -49,6 +49,7 @@ exports.login = asyncWrapper (async (req, res, next) => {
     const refreshToken = generateJWT(user, JWT_REFRESH_KEY, "30d");
     res.cookie('jwt', refreshToken, {
         httpOnly: true,
+        secure: true,
         sameSite: 'None',
         maxAge: 7 * 24 * 60 * 60 * 1000
     })
@@ -57,7 +58,10 @@ exports.login = asyncWrapper (async (req, res, next) => {
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
-   res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
+    res.clearCookie('jwt');
+
+    console.log(refreshToken)
+    res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
 });
 
 exports.verify = asyncWrapper (async (req, res) => {
