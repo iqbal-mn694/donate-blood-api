@@ -168,7 +168,7 @@ router.post('/login', login);
 */
 router.delete('/logout', auth, logout);
 
-router.get('/verify-email', verify);
+router.get('/verify-email', verify); //pr
 
 /**
  * @swagger
@@ -247,7 +247,7 @@ router.get('/verify-email', verify);
 */
 router.get('/me', auth, me);
 
-router.get('/me/:id', auth, detail);
+router.get('/me/:id', auth, detail); //pr
 
 /**
  * @swagger
@@ -350,16 +350,17 @@ router.get('/me/:id', auth, detail);
  *      500:
  *        description: internal server error
 */
-router.put('/me', auth, imageUpload.single('image'), edit);
+router.put('/me', auth, imageUpload.single('image'), edit); //pr
 
 router.get('/refresh-token' , auth, async (req, res) => {
   // const userData = req.user;
-  const refreshToken = req.cookies.jwt;
+  const refreshToken = req.session.refreshToken;
+  console.log(refreshToken)
   
   const { exp, ...payload } = await verifyJWT(refreshToken, JWT_REFRESH_KEY)
   const newAccessToken = generateJWT(payload, JWT_ACCESS_KEY, "15m");
 
- res.status(200).json({ success: true, status: 200, message: 'Success get new access token', accessToken: newAccessToken })
-})
+ res.status(200).json({ success: true, status: 200, message: 'Success get new access token', newAccessToken })
+}) //pr
 
 module.exports = router;

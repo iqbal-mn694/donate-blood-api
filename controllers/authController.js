@@ -19,12 +19,16 @@ exports.register = asyncWrapper (async (req, res, next) => {
             options: {
                 data: {
                     username: req.body.username
-                }
+                },
+                // emailRedirectTo: "http://localhost:3000/login",
             }
         });
         
     if(error) throw error; // bug
-    res.status(201).json({ success: true, status: 201, message: 'Register has been successfully', data })
+    const { user: { user_metadata, id }} = data;
+    const user = { id, ...user_metadata }
+
+    res.status(201).json({ success: true, status: 201, message: 'Register has been successfully, please check your email for account verification', user })
 });
 
 exports.login = asyncWrapper (async (req, res, next) => {
@@ -47,18 +51,17 @@ exports.login = asyncWrapper (async (req, res, next) => {
 
     const accessToken = generateJWT(user, JWT_ACCESS_KEY, "15m");
     const refreshToken = generateJWT(user, JWT_REFRESH_KEY, "30d");
-    res.cookie('jwt', refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'None',
-        maxAge: 7 * 24 * 60 * 60 * 1000
-    })
-
+    req.session.refreshToken = refreshToken;
+    req.session.save((err) => {
+        if (err) {
+          console.error('Failed to save session:', err);
+        }});
     res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', user, accessToken })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
     res.clearCookie('jwt');
+    const refreshToken = req.cookies.jwt;
 
     console.log(refreshToken)
     res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });

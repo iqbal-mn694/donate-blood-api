@@ -25,8 +25,8 @@ exports.makeBloodRequest = asyncWrapper(async (req, res, next) => {
 exports.updateBloodRequest = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const { requestID } = req.params;
-  const { bloodType, quantity, hospitalName, latitude, longitude } = req.body;
-  const update = await updateBloodRequestedByID(userID, requestID, bloodType, quantity, hospitalName, latitude, longitude);
+  const { name, bloodType, quantity, hospitalName, latitude, longitude } = req.body;
+  const update = await updateBloodRequestedByID(userID, requestID, name, bloodType, quantity, hospitalName, latitude, longitude);
 
   res.status(200).json({ success: true, status: 200, data: update });
 });

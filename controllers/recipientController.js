@@ -11,7 +11,7 @@ exports.getRecipients = asyncWrapper(async (req, res) => {
 exports.getNearbyRecipients = asyncWrapper(async (req, res) => {
   const { lat, long } = req.query;
   const { id: currentUserID } = req.user;
-  const nearbyRecipient = await getRequestsByNearest(lat, long, currentUserID);
+  const nearbyRecipient = await getRecipientsByNearest(lat, long, currentUserID);
 
   res.status(200).json({ success: true, status: 200, data: nearbyRecipient });
 });

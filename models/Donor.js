@@ -24,7 +24,7 @@ exports.getDetailDonorByRequestID = async(requestID) => {
   return data;
 }
 
-exports.getDetailDonorByDonorID = async(requestID) => {
+exports.getDetailDonorByDonorID = async(donorID) => {
   const { data, error } = await db
   .from('donation')
   .select(`*, 

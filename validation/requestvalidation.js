@@ -10,7 +10,7 @@ exports.requestValidation = async (req) => {
         errorMessage: 'Blood type is required'
       },
       isIn: {
-        options: ['A', 'a', 'B', 'b', 'AB', 'ab', 'O', 'o'],
+        options: [['A', 'a', 'B', 'b', 'AB', 'ab', 'O', 'o']],
         errorMessage: 'Blood type is not valid'
       }
     },

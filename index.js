@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const xss = require('xss-clean');
-const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const swaggerUI = require('swagger-ui-express');
 const swaggerDoc = require('swagger-jsdoc')
 const errorHandler = require('./middleware/errorHandler');
@@ -43,10 +43,26 @@ app.use(express.json());
 // app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 
-app.use(cors());
+app.use(session({
+  secret: 'sangat rahasia',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    path: '/',
+    secure: true,
+    httpOnly: true,
+    sameSite: 'none',
+    maxAge: 24 * 60 * 60 * 1000,
+  },
+}));
+
+app.use(cors({
+  origin: ["http://localhost:5500"],
+  credentials: true
+}));
+
 app.use(helmet());
 app.use(xss());
-app.use(cookieParser())
 app.disable('x-powered-by')
 
 // web app api endpoint

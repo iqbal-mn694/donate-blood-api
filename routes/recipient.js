@@ -12,8 +12,8 @@ const { getRecipients, getNearbyRecipients, getRecipient, getByFulfilledStatus }
  */
 
 // detail request yang bisa dipenuhi
-router.get('/', auth, getByFulfilledStatus);
 router.get('/', auth, getRecipients);
+router.get('/', auth, getByFulfilledStatus);
 
 
 /**

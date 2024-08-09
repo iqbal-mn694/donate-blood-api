@@ -66,10 +66,11 @@ exports.makeBloodRequest = async (getAuthID, name, recipientAddress, bloodType, 
   return data
 }
 
-exports.updateBloodRequestedByID = async(getAuthID, requestID, bloodType, quantity, hospitalName, longitude, latitude) => {
+exports.updateBloodRequestedByID = async(getAuthID, requestID, name, bloodType, quantity, hospitalName, longitude, latitude) => {
   const { data, error } = await db
     .from('blood_request')
     .update({
+      name: name,
       blood_type: bloodType,
       quantity: quantity,
       hospital_name: hospitalName,

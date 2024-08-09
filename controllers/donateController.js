@@ -38,6 +38,7 @@ exports.detailDonorByRequestID = asyncWrapper(async (req, res) => {
 
 exports.detailDonorByDonorID = asyncWrapper(async (req, res) => {
   const { donorID } = req.query;
+  console.log(donorID)
   const detailDonor = await getDetailDonorByDonorID(donorID);
 
   res.status(200).json({ success: true, status: 200, message: 'Success get detail donor', data: detailDonor })
