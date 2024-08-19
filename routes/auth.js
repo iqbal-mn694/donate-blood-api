@@ -354,13 +354,19 @@ router.put('/me', auth, imageUpload.single('image'), edit); //pr
 
 router.get('/refresh-token' , auth, async (req, res) => {
   // const userData = req.user;
-  const refreshToken = req.session.refreshToken;
-  console.log(refreshToken)
+  try {
+    const sessionID = req.cookies['connect.sid'];
+    const refreshToken = req.session.refreshToken;;
+    console.log(refreshToken);
+    
+    const { exp, ...payload } = await verifyJWT(refreshToken, JWT_REFRESH_KEY)
+    const newAccessToken = generateJWT(payload, JWT_ACCESS_KEY, "15m");
   
-  const { exp, ...payload } = await verifyJWT(refreshToken, JWT_REFRESH_KEY)
-  const newAccessToken = generateJWT(payload, JWT_ACCESS_KEY, "15m");
-
- res.status(200).json({ success: true, status: 200, message: 'Success get new access token', newAccessToken })
+   res.status(200).json({ success: true, status: 200, message: 'Success get new access token', newAccessToken })
+  } catch (error) {
+    res.send(req.sessionStore);
+    // res.send(req.signedCookies);
+  }
 }) //pr
 
 module.exports = router;
