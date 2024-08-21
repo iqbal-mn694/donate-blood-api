@@ -6,6 +6,7 @@ const { validateInput } = require('../middleware/validator');
 const { auth, generateAccessToken } = require('../middleware/auth');
 const imageUpload = require('../middleware/imageUpload');
 const { generateJWT, verifyJWT } = require('../libs/makeJWT');
+const dbConnection = require('../models/dbConnection');
 
 const JWT_ACCESS_KEY = process.env.JWT_ACCESS_KEY;
 const JWT_REFRESH_KEY = process.env.JWT_REFRESH_KEY;
@@ -353,19 +354,19 @@ router.get('/me/:id', auth, detail); //pr
 router.put('/me', auth, imageUpload.single('image'), edit); //pr
 
 router.get('/refresh-token' , auth, async (req, res) => {
-  // const userData = req.user;
   try {
-    const sessionID = req.cookies['connect.sid'];
-    const refreshToken = req.session.refreshToken;;
-    console.log(refreshToken);
+    const { data: { token : refreshToken }} = await dbConnection
+      .from('token')
+      .select()
+      .eq('user_id', req.user.id)
+      .single();
     
     const { exp, ...payload } = await verifyJWT(refreshToken, JWT_REFRESH_KEY)
-    const newAccessToken = generateJWT(payload, JWT_ACCESS_KEY, "15m");
+    const accessToken = generateJWT(payload, JWT_ACCESS_KEY, "15m");
   
-   res.status(200).json({ success: true, status: 200, message: 'Success get new access token', newAccessToken })
+   res.status(200).json({ success: true, status: 200, message: 'Success get new access token', accessToken })
   } catch (error) {
-    res.send(req.sessionStore);
-    // res.send(req.signedCookies);
+    res.send(error);
   }
 }) //pr
 

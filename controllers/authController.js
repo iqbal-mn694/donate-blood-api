@@ -3,7 +3,7 @@ const supabase = require('../models/dbConnection');
 const jwt = require('jsonwebtoken');
 const { registerValidation } = require('../validation/registerValidation');
 const { loginValidation } = require('../validation/loginValidation');
-const { generateJWT } = require('../libs/makeJWT');
+const { generateJWT, verifyJWT } = require('../libs/makeJWT');
 
 const JWT_ACCESS_KEY = process.env.JWT_ACCESS_KEY;
 const JWT_REFRESH_KEY = process.env.JWT_REFRESH_KEY;
@@ -51,19 +51,24 @@ exports.login = asyncWrapper (async (req, res, next) => {
 
     const accessToken = generateJWT(user, JWT_ACCESS_KEY, "15m");
     const refreshToken = generateJWT(user, JWT_REFRESH_KEY, "30d");
-    req.session.refreshToken = refreshToken;
-    req.session.save((err) => {
-        if (err) {
-          console.error('Failed to save session:', err);
-        }});
+
+    await supabase
+        .from('token')
+        .insert({
+            user_id: id,
+            token: refreshToken
+    });
+
     res.status(200).json({ success: true, status: 200, message: 'Login has been successfully', user, accessToken })   
 });
 
 exports.logout = asyncWrapper (async (req, res) => {
-    res.clearCookie('jwt');
-    const refreshToken = req.cookies.jwt;
+    const { error } = await supabase
+        .from('token')
+        .delete()
+        .eq('user_id', req.user.id);
 
-    console.log(refreshToken)
+    if(error) throw error;
     res.status(200).json({ success: true, status: 200, message: 'Logout has been successfully', data: [] });
 });
 
@@ -89,12 +94,13 @@ exports.edit = asyncWrapper (async (req, res) => {
             birthdate: req.body.birthdate,
             gender: req.body.gender,
             blood_type: req.body.bloodType,
-            profile_image: req.file && `Uploads/${req.file.filename}` 
+            profile_image: req.file && `Uploads/${req.file.filename}`,
         }
     });
 
     if(error) throw error;
-    res.status(200).json({ success: true, status: 200, message: 'User has been updated', data: data})
+    const accessToken = generateJWT(data, JWT_ACCESS_KEY, "15m");
+    res.status(200).json({ success: true, status: 200, message: 'User has been updated', data: data, accessToken})
 });
 
 exports.detail = asyncWrapper (async (req, res) => {
@@ -104,5 +110,19 @@ exports.detail = asyncWrapper (async (req, res) => {
 
     if(error) throw error;
     res.status(200).json({ success: true, status:200, message: 'Success get account preferences', data });
+})
+
+exports.refreshToken = asyncWrapper (async (req, res) => {
+    const { data: { token }, error } = await dbConnection
+      .from('token')
+      .select()
+      .eq('user_id', req.user.id)
+      .single();
+    
+    if(error) throw error;
+    const { exp, ...payload } = await verifyJWT(token, JWT_REFRESH_KEY)
+    const accessToken = generateJWT(payload, JWT_ACCESS_KEY, "15m");
+  
+   res.status(200).json({ success: true, status: 200, message: 'Success get new access token', accessToken })
 })
 
