@@ -353,21 +353,6 @@ router.get('/me/:id', auth, detail); //pr
 */
 router.put('/me', auth, imageUpload.single('image'), edit); //pr
 
-router.get('/refresh-token' , auth, async (req, res) => {
-  try {
-    const { data: { token : refreshToken }} = await dbConnection
-      .from('token')
-      .select()
-      .eq('user_id', req.user.id)
-      .single();
-    
-    const { exp, ...payload } = await verifyJWT(refreshToken, JWT_REFRESH_KEY)
-    const accessToken = generateJWT(payload, JWT_ACCESS_KEY, "15m");
-  
-   res.status(200).json({ success: true, status: 200, message: 'Success get new access token', accessToken })
-  } catch (error) {
-    res.send(error);
-  }
-}) //pr
+router.get('/refresh-token' , auth, ) //pr
 
 module.exports = router;
