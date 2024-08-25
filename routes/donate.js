@@ -72,8 +72,8 @@ router.post('/', auth, donateBlood);
 */
 router.post('/:requestID', auth, donateBloodByRequestID);
 
-router.get('/', detailDonorByDonorID);
-router.get('/', detailDonorByRequestID);
+router.get('/donor', detailDonorByDonorID);
+router.get('/recipient', detailDonorByRequestID);
 
 // router.get('/request-test', async(req, res) => {    
 //     const test = await supabase.from('blood_request').insert(

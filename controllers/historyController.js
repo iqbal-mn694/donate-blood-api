@@ -10,7 +10,7 @@ exports.history = asyncWrapper(async (req, res) => {
       return {
         id: record.id,
         recipientID: (record.blood_request.id),
-        donorID: (record.donor.id),
+        donorID: (record.donor.id), 
         recipient_name: (record.blood_request && record.blood_request.name) || null,
         donor_name: (record.donor && record.donor.donor_name) || null,  
         created_at: record.created_at
