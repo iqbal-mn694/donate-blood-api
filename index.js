@@ -51,19 +51,19 @@ app.use(express.urlencoded({ extended: false }));
 // }));`
 app.use(cors());
 
-app.use(cookieParser());
-app.use(session({
-  secret: 'sangat rahasia',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    path: '/',
-    // secure: true,
-    httpOnly: true,
-    sameSite: 'none',
-    maxAge: 24 * 60 * 60 * 1000,
-  },
-}));
+// app.use(cookieParser());
+// app.use(session({
+//   secret: 'sangat rahasia',
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     path: '/',
+//     // secure: true,
+//     httpOnly: true,
+//     sameSite: 'none',
+//     maxAge: 24 * 60 * 60 * 1000,
+//   },
+// }));
 
 
 

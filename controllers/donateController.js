@@ -32,7 +32,6 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
 exports.detailDonorByRequestID = asyncWrapper(async (req, res) => {
   const { ID } = req.query;
   const detailDonor = await getDetailDonorByRequestID(ID);
-  console.log(detailDonor)
 
   res.status(200).json({ success: true, status: 200, message: 'Success get detail donor', data: detailDonor })
 });

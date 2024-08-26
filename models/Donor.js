@@ -21,6 +21,9 @@ exports.getDetailDonorByRequestID = async(requestID) => {
     donor:donor_id ( donor_name, blood_type ), request:request_id ( name, blood_type, quantity, hospital_name, request_at, recipient_address, status )`)
   .eq('request_id', requestID);
 
+  if(error) throw error;
+  if(data.length === 0 || !data) throw { message: "RequestID not found", statusCode: 404 };
+
   return data;
 }
 
@@ -31,5 +34,8 @@ exports.getDetailDonorByDonorID = async(donorID) => {
     donor:donor_id ( donor_name, blood_type ), request:request_id ( name, blood_type, quantity, hospital_name, request_at, recipient_address, status )`)
   .eq('donor_id', donorID);
 
+  if(error) throw error;
+  if(data.length === 0 || !data) throw { message: "RequestID not found", statusCode: 404 };
+  
   return data;
 }
