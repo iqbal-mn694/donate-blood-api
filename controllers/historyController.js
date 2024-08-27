@@ -9,6 +9,8 @@ exports.history = asyncWrapper(async (req, res) => {
     .select(`*, 
       blood_request:request_id (name ), donor:donor_id (donor_name )`)
       .eq('user_id', userID);
+
+    if(data.length === 0) throw { message: "History is empty", statusCode: 404 };
  
   const newData = data.map(record => {
     return {
@@ -22,7 +24,7 @@ exports.history = asyncWrapper(async (req, res) => {
   });
   
   if(error) throw error;
-  res.status(200).json({ success: true, status: 200, newData });
+  res.status(200).json({ success: true, status: 200, data: newData });
 });
 
 exports.historyDetail = asyncWrapper(async (req, res) => {
@@ -35,6 +37,8 @@ exports.historyDetail = asyncWrapper(async (req, res) => {
     .eq('user_id', userID)
     .eq('id', historyID);
 
+    if(data.length === 0) throw { message: "History detail not found", statusCode: 404 };
+
     const newData = data.map(record => {
       return {
         id: record.id, 
@@ -45,8 +49,9 @@ exports.historyDetail = asyncWrapper(async (req, res) => {
         created_at: record.created_at
       };
     });
+
   
   if(error) throw error;
-  res.status(200).json({ success: true, status: 200, newData });
+  res.status(200).json({ success: true, status: 200, data: newData });
 });
 
