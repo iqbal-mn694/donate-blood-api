@@ -22,7 +22,7 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
     const updateFilled = await updateFilledRequest(requestID);
     const donation = await insertDonation(userID, requestID, donor[0].id);
     
-    res.status(201).json({ success: true, status: 201, message: 'Blood has been donated successfully', data: donor });
+    res.status(201).json({ success: true, status: 201, message: 'Blood has been donated successfully', data: donation });
   }
   // if fulfiled change status to fulfiled 
   const changeRequestStatus = await updateRequestStatus(requestID);
