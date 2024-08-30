@@ -5,7 +5,6 @@ exports.getBloodRequestedList = async(getAuthID) => {
   const { data, error } = await db
     .from('blood_request')
     .select()
-    .eq('user_id', getAuthID);
 
   if(error) throw error;
   if(data.length === 0) throw { message: "Request list not found", statusCode: 404 };

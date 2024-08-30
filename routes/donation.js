@@ -2,7 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const { auth } = require('../middleware/auth');
-const { donation, donationByID, deleteDonation, clearDonation } = require('../controllers/donationController');
+const { 
+  donation,
+  donationByID,
+  deleteDonation,
+  clearDonation,
+  detailDonationProcessed 
+} = require('../controllers/donationController');
 
 /**
  * @swagger
@@ -121,6 +127,9 @@ router.get('/', auth, donation);
  *        description: Internal server error
 */
 router.get('/:donationID', auth, donationByID);
+
+router.get('/processed/:processedID', auth, detailDonationProcessed);
+
 
 /**
  * @swagger

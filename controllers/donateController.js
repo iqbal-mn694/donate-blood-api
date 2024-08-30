@@ -2,8 +2,18 @@ const asyncWrapper = require("../libs/asyncWrapper");
 const db = require("../models/dbConnection")
 
 const { getBloodRequestByID, updateRequestStatus, updateFilledRequest } = require("../models/BloodRequest");
-const { countDonationByRequestID, insertDonation } = require("../models/Donation");
+const { countDonationByRequestID, insertDonation, getDonationProcessedDetail } = require("../models/Donation");
 const { insertDonor, getDetailDonor, getDetailDonorByRequestID, getDetailDonorByDonorID } = require("../models/Donor");
+
+exports.detailDonorProcessed = asyncWrapper(async (req, res) => {
+  const { id: userID } = req.user;
+  const { processedID } = req.params;
+
+  // console.log(userID);  
+  const donorProcessed = await getDonationProcessedDetail(userID, processedID);
+
+  res.status(200).json({ success: true, status: 200, message: 'Success get detail donor process', data: donorProcessed })
+});
 
 
 // donate blood by request ID
@@ -30,15 +40,15 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
 });
 
 exports.detailDonorByRequestID = asyncWrapper(async (req, res) => {
-  const { ID } = req.query;
-  const detailDonor = await getDetailDonorByRequestID(ID);
+  const { requestID } = req.params;
+  const detailDonor = await getDetailDonorByRequestID(requestID);
 
   res.status(200).json({ success: true, status: 200, message: 'Success get detail donor', data: detailDonor })
 });
 
 exports.detailDonorByDonorID = asyncWrapper(async (req, res) => {
-  const { ID } = req.query;
-  const detailDonor = await getDetailDonorByDonorID(ID);
+  const { donorID } = req.params;
+  const detailDonor = await getDetailDonorByDonorID(donorID);
 
   res.status(200).json({ success: true, status: 200, message: 'Success get detail donor', data: detailDonor })
 });

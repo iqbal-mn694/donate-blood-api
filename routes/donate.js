@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { auth } = require('../middleware/auth')
 
-const { donateBlood, donateBloodByRequestID, detailDonor, detailDonorByRequestID, detailDonorByDonorID } = require('../controllers/donateController');
+const { donateBlood, donateBloodByRequestID, detailDonorProcessed, detailDonorByRequestID, detailDonorByDonorID } = require('../controllers/donateController');
 
 /**
  * @swagger
@@ -72,8 +72,9 @@ router.post('/', auth, donateBlood);
 */
 router.post('/:requestID', auth, donateBloodByRequestID);
 
-router.get('/donor', detailDonorByDonorID);
-router.get('/recipient', detailDonorByRequestID);
+router.get('/donation-detail/:donorID', auth, detailDonorByDonorID);
+router.get('/processed/:processedID', auth, detailDonorProcessed);
+router.get('/recipient', auth, detailDonorByRequestID);
 
 // router.get('/request-test', async(req, res) => {    
 //     const test = await supabase.from('blood_request').insert(
