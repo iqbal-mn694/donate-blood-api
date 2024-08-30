@@ -23,6 +23,17 @@ exports.getBloodRequestByID = async(getAuthID, requestID) => {
   return data[0];
 }
 
+exports.getBloodRequestFinish = async (requestID, getAuthID) => {
+  const { data, error } = await db
+  .from('blood_request')
+  .select()
+  .eq('id', requestID)
+  .eq('user_id', getAuthID);
+  
+  if(error) throw error;
+  if(data.length === 0 || !data) throw { message: "RequestID not found", statusCode: 404 };
+  return data;
+}
 
 exports.deleteBloodRequestedByID = async(getAuthID, requestID) => {
   const { data, error } = await db
@@ -58,6 +69,7 @@ exports.makeBloodRequest = async (getAuthID, name, recipientAddress, bloodType, 
       quantity: quantity,
       hospital_name: hospitalName,
       location: `POINT(${longitude} ${latitude})`, // datatype for location
+      status: "Menunggu"
     })
     .select();
   
@@ -85,10 +97,10 @@ exports.updateBloodRequestedByID = async(getAuthID, requestID, name, bloodType, 
 }
 
 // update blood requst status to fulfilled
-exports.updateRequestStatus = async(requestID) => {
+exports.updateRequestStatus = async(requestID,status) => {
   const { data, error } = await db
   .from('blood_request')
-  .update({ status: "fulfilled"}) 
+  .update({ status }) 
   .eq('id', requestID)  
   .select()
   

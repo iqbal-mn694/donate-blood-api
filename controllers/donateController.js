@@ -5,17 +5,6 @@ const { getBloodRequestByID, updateRequestStatus, updateFilledRequest } = requir
 const { countDonationByRequestID, insertDonation, getDonationProcessedDetail } = require("../models/Donation");
 const { insertDonor, getDetailDonor, getDetailDonorByRequestID, getDetailDonorByDonorID } = require("../models/Donor");
 
-exports.detailDonorProcessed = asyncWrapper(async (req, res) => {
-  const { id: userID } = req.user;
-  const { processedID } = req.params;
-
-  // console.log(userID);  
-  const donorProcessed = await getDonationProcessedDetail(userID, processedID);
-
-  res.status(200).json({ success: true, status: 200, message: 'Success get detail donor process', data: donorProcessed })
-});
-
-
 // donate blood by request ID
 exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
@@ -29,14 +18,19 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
   // check if user's blood request is fulfiled
   if(donationTotalByRequestID <  bloodRequestQuantity) {
     const donor = await insertDonor(userID, donorName, bloodType);
-    const updateFilled = await updateFilledRequest(requestID);
+      await updateFilledRequest(requestID);
+      await updateRequestStatus(requestID, "Kurang"); 
+
     const donation = await insertDonation(userID, requestID, donor[0].id);
     
     res.status(201).json({ success: true, status: 201, message: 'Blood has been donated successfully', data: donation });
   }
-  // if fulfiled change status to fulfiled 
-  const changeRequestStatus = await updateRequestStatus(requestID);
-  res.status(200).json({ success: true, status: 200, message: 'Request status is fulfiled', data: changeRequestStatus })
+
+  if(donationTotalByRequestID === getBloodRequest.jumlah_terpenuhi) {
+    // if fulfiled change status to fulfiled 
+    const changeRequestStatus = await updateRequestStatus(requestID, "Tercukupi");
+    res.status(200).json({ success: true, status: 200, message: 'Request status is fulfiled', data: changeRequestStatus })
+  }
 });
 
 exports.detailDonorByRequestID = asyncWrapper(async (req, res) => {

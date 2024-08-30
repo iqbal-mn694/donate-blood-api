@@ -8,7 +8,8 @@ const {
   updateBloodRequest,
   deleteBloodRequest,
   clearBloodRequest, 
-  getBloodRequest } = require('../controllers/requestController');
+  getBloodRequest,
+  bloodRequestFinish} = require('../controllers/requestController');
 
 /**
  * @swagger
@@ -184,6 +185,8 @@ router.post('/', auth, makeBloodRequest);
  *        description: Internal server error
 */
 router.get('/', auth, getBloodRequests);
+
+router.get('/finish/:requestID', auth, bloodRequestFinish)
 
 /**
  * @swagger

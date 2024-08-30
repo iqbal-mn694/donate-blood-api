@@ -73,7 +73,7 @@ router.post('/', auth, donateBlood);
 router.post('/:requestID', auth, donateBloodByRequestID);
 
 router.get('/donation-detail/:donorID', auth, detailDonorByDonorID);
-router.get('/processed/:processedID', auth, detailDonorProcessed);
+
 router.get('/recipient', auth, detailDonorByRequestID);
 
 // router.get('/request-test', async(req, res) => {    

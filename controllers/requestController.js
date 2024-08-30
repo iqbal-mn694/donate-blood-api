@@ -6,7 +6,8 @@ const {
   updateRequestStatus,
   deleteBloodRequestedByID,
   clearBloodRequested,
-  updateBloodRequestedByID } = require('../models/BloodRequest');
+  updateBloodRequestedByID, 
+  getBloodRequestFinish} = require('../models/BloodRequest');
 const { requestValidation } = require('../validation/requestvalidation');
 
 
@@ -47,6 +48,13 @@ exports.getBloodRequests = asyncWrapper(async (req, res) => {
   const bloodRequestedList = await getBloodRequestedList(userID);
 
   res.status(200).json({ success: true, status: 200, data: bloodRequestedList });
+});
+
+exports.bloodRequestFinish = asyncWrapper(async (req, res) => {
+  const { id: userID } = req.user;
+  const { requestID } = req.params;
+  const bloodRequestFinish = await getBloodRequestFinish(requestID,userID)
+  res.status(200).json({ success: true, status: 200, data: bloodRequestFinish });
 });
 
 exports.deleteBloodRequest = asyncWrapper(async (req, res) => {
