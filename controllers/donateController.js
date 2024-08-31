@@ -9,7 +9,7 @@ const { insertDonor, getDetailDonor, getDetailDonorByRequestID, getDetailDonorBy
 exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const { requestID } = req.params;
-  const { donorName, bloodType } = req.body;
+  const { donorName, bloodType, donorAddress } = req.body;
 
   const donationTotalByRequestID = await countDonationByRequestID(requestID)
   const getBloodRequest = await getBloodRequestByID(userID, requestID)
@@ -17,7 +17,7 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
 
   // check if user's blood request is fulfiled
   if(donationTotalByRequestID <  bloodRequestQuantity) {
-    const donor = await insertDonor(userID, donorName, bloodType);
+    const donor = await insertDonor(userID, donorName, bloodType, donorAddress);
       await updateRequestStatus(requestID, "Kurang"); 
 
     const donation = await insertDonation(userID, requestID, donor[0].id);
