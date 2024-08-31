@@ -110,7 +110,7 @@ exports.updateRequestStatus = async(requestID,status) => {
 }
 
 exports.updateFilledRequest = async(requestID) => {
-  const { data, error } = await db.rpc('increment_jumlah_terpenuhi', { request_id: requestID })
+  const { data, error } = await db.rpc('increment_jumlah_terpenuhi', { request_id: requestID }).select();
   
   if(error) throw error;
   // if(!data) throw { message: "RequestID tidak ditemukan", code: 404 };

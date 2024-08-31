@@ -15,10 +15,11 @@ exports.history = asyncWrapper(async (req, res) => {
   const newData = data.map(record => {
     return {
       id: record.id, 
-      recipientID: (record.blood_request && record.blood_request.id) || null,
-      donorID: (record.donor && record.donor.id || null), 
+      recipientID: (record.blood_request && record.request.id) || null,
+      donorID: (record.donor && record.donor_id || null), 
       recipient_name: (record.blood_request && record.blood_request.name) || null,
       donor_name: (record.donor && record.donor.donor_name) || null,  
+      option: (record.option),
       created_at: record.created_at
     };
   });
