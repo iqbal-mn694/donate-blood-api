@@ -1,12 +1,13 @@
 const db = require("./dbConnection")
 
-exports.insertDonor = async(getAuthID, donorName, bloodType) => {
+exports.insertDonor = async(getAuthID, donorName, bloodType, donorAddress) => {
     const { data, error } = await db
     .from('donor')
     .insert({
       user_id: getAuthID,
       donor_name: donorName,
       blood_type: bloodType,
+      donor_address: donorAddress
     })
     .select()
 
