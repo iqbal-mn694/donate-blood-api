@@ -28,7 +28,6 @@ exports.getBloodRequestFinish = async (requestID, getAuthID) => {
   .from('blood_request')
   .select()
   .eq('id', requestID)
-  .eq('user_id', getAuthID);
   
   if(error) throw error;
   if(data.length === 0 || !data) throw { message: "RequestID not found", statusCode: 404 };
