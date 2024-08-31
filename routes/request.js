@@ -186,7 +186,7 @@ router.post('/', auth, makeBloodRequest);
 */
 router.get('/', auth, getBloodRequests);
 
-router.get('/finish/:requestID', auth, bloodRequestFinish)
+router.post('/finish/:requestID', auth, bloodRequestFinish)
 
 /**
  * @swagger
