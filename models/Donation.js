@@ -71,7 +71,7 @@ exports.deleteDonationByID = async(getAuthID, donationID) => {
     .from('donation')
     .delete()
     .eq('user_id', getAuthID)
-    .eq('id', donationID)
+    .eq('donor_id', donationID)
   
   if(error) throw error;
   // if(!data) throw { message: "RequestID not found", statusCode: 404 };

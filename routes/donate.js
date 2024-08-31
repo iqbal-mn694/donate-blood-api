@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { auth } = require('../middleware/auth')
 
-const { donateBlood, donateBloodByRequestID, detailDonorProcessed, detailDonorByRequestID, detailDonorByDonorID } = require('../controllers/donateController');
+const { donateBlood, donateBloodByRequestID, detailDonorProcessed, detailDonorByRequestID, detailDonorByDonorID, cancelDonateBlood } = require('../controllers/donateController');
 
 /**
  * @swagger
@@ -76,6 +76,7 @@ router.get('/donation-detail/:donorID', auth, detailDonorByDonorID);
 
 router.get('/recipient', auth, detailDonorByRequestID);
 
+router.delete('/cancel/:donorID', auth, cancelDonateBlood)
 // router.get('/request-test', async(req, res) => {    
 //     const test = await supabase.from('blood_request').insert(
 //         {

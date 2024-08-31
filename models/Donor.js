@@ -1,3 +1,4 @@
+const asyncWrapper = require("../libs/asyncWrapper");
 const db = require("./dbConnection")
 
 exports.insertDonor = async(getAuthID, donorName, bloodType, donorAddress) => {
@@ -10,6 +11,17 @@ exports.insertDonor = async(getAuthID, donorName, bloodType, donorAddress) => {
       donor_address: donorAddress
     })
     .select()
+
+    if(error) throw error;
+    return data;
+}
+
+exports.cancelDonor = async(getAuthID, donorID) => {
+  const { data, error } = await db
+    .from('donor')
+    .delete()
+    // .eq('user_id', getAuthID)
+    .eq('id', donorID)
 
     if(error) throw error;
     return data;

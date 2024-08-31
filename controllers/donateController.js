@@ -2,8 +2,8 @@ const asyncWrapper = require("../libs/asyncWrapper");
 const db = require("../models/dbConnection")
 
 const { getBloodRequestByID, updateRequestStatus, updateFilledRequest } = require("../models/BloodRequest");
-const { countDonationByRequestID, insertDonation, getDonationProcessedDetail } = require("../models/Donation");
-const { insertDonor, getDetailDonor, getDetailDonorByRequestID, getDetailDonorByDonorID } = require("../models/Donor");
+const { countDonationByRequestID, insertDonation, getDonationProcessedDetail, deleteDonationByID } = require("../models/Donation");
+const { insertDonor, getDetailDonor, getDetailDonorByRequestID, getDetailDonorByDonorID, cancelDonor } = require("../models/Donor");
 
 // donate blood by request ID
 exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
@@ -44,10 +44,18 @@ exports.detailDonorByDonorID = asyncWrapper(async (req, res) => {
 });
 
 exports.donateBlood = asyncWrapper(async (req, res) => {
-  const { id: userID } = req.userID;
+  const { id: userID } = req.user;
   const { donorName, bloodType } = req.body;
   const donor = await insertDonor(userID, donorName, bloodType);
   const donation = await insertDonation(userID);
 
   res.status(201).json({ success: true, status: 201, message: "Blood has been donated successfully" });
+})
+
+exports.cancelDonateBlood = asyncWrapper(async (req, res) => {
+  const { id: userID } = req.user;
+  const { donorID } = req.params;
+
+  await cancelDonor(userID, donorID);
+  res.status(200).json({ success: true, status: 200, message: "Blood donate has been cancelled" , data: []})
 })
