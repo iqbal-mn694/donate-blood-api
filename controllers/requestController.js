@@ -54,9 +54,9 @@ exports.getBloodRequests = asyncWrapper(async (req, res) => {
 exports.bloodRequestFinish = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const { requestID } = req.params;
-  const bloodRequestFinish = await getBloodRequestFinish(requestID, userID)
-  await updateFilledRequest(requestID);
-  res.status(200).json({ success: true, status: 200, data: bloodRequestFinish });
+  const finish = await updateFilledRequest(requestID);
+
+  res.status(200).json({ success: true, status: 200, data: finish });
 });
 
 exports.deleteBloodRequest = asyncWrapper(async (req, res) => {

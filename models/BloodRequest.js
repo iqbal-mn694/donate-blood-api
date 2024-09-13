@@ -110,12 +110,12 @@ exports.updateRequestStatus = async(requestID,status) => {
 }
 
 exports.updateFilledRequest = async(requestID) => {
-  const { data, error } = await db.rpc('increment_jumlah_terpenuhi', { request_id: requestID }).select();
+  const { data, error } = await db.rpc('increment_jumlah_terpenuhi15', { request_id: requestID });
   
   if(error) throw error;
   // if(!data) throw { message: "RequestID tidak ditemukan", code: 404 };
   // if(data.status === 'Fulfiled') throw { message: 'Recipient blood has been fulfiled'}
-  return data;
+  return data[0];
 }
 
 
