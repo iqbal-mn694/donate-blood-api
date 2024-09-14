@@ -77,19 +77,5 @@ router.get('/donation-detail/:donorID', auth, detailDonorByDonorID);
 router.get('/recipient', auth, detailDonorByRequestID);
 
 router.delete('/cancel/:donorID', auth, cancelDonateBlood)
-// router.get('/request-test', async(req, res) => {    
-//     const test = await supabase.from('blood_request').insert(
-//         {
-//             user_id : "2f53ee64-2aa2-469e-aefc-479a322559b0",
-//             blood_type: "A",
-//             quantity: 2,
-//             hospital_name: "RSUD",
-//             location: 'POINT(108.25293 -7.3787595)'
-//         },
-//         )
-
-//     res.send(test)
-// })
-
 
 module.exports = router

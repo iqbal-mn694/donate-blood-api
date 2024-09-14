@@ -56,8 +56,6 @@ exports.bloodRequestFinish = asyncWrapper(async (req, res) => {
   const { requestID } = req.params;
   const { jumlahTerpenuhi } = req.body;
 
-
-  
   let getBloodRequest = await getBloodRequestByID(requestID);
   let donationTotal = getBloodRequest.jumlah_terpenuhi;
   let bloodRequestQuantity = getBloodRequest.quantity;

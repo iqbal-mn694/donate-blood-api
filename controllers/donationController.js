@@ -1,6 +1,6 @@
 const asyncWrapper = require('../libs/asyncWrapper');
 
-const { getDonation, getDonationById, deleteDonationByID, clearDonation, getDonationProcessedDetail } = require('../models/Donation');
+const { getDonation, getDonationById, deleteDonationByID, getDonationProcessedDetail, clearDonation } = require('../models/Donation');
 
 // donation
 exports.donation = asyncWrapper(async (req, res) => {
@@ -38,7 +38,8 @@ exports.deleteDonation = asyncWrapper(async (req, res) => {
 
 exports.clearDonation = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
-  const clearDonation = await clearDonation(userID);
+  const clearDonation = await clearDonation;
+
   
   res.status(200).json({ success: true, status: 200, data: clearDonation});
 });
