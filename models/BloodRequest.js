@@ -12,7 +12,7 @@ exports.getBloodRequestedList = async(getAuthID) => {
 }
 
 // get blood requested by detail
-exports.getBloodRequestByID = async(getAuthID, requestID) => {
+exports.getBloodRequestByID = async(requestID) => {
   const { data, error } = await db
   .from('blood_request')
   .select('*')
@@ -109,13 +109,18 @@ exports.updateRequestStatus = async(requestID,status) => {
   return data;
 }
 
-exports.updateFilledRequest = async(requestID) => {
-  const { data, error } = await db.rpc('increment_jumlah_terpenuhi15', { request_id: requestID });
-  
-  if(error) throw error;
-  // if(!data) throw { message: "RequestID tidak ditemukan", code: 404 };
-  // if(data.status === 'Fulfiled') throw { message: 'Recipient blood has been fulfiled'}
-  return data[0];
+exports.updateFilledRequest = async(requestID, jumlah_terpenuhi) => {
+  const getBloodRequest = await this.getBloodRequestByID(requestID); // belum handle error
+  const { data: bloodFilled, error: errorBloodFilled } = await db
+    .from('blood_request')
+    .update({ jumlah_terpenuhi: getBloodRequest.jumlah_terpenuhi + jumlah_terpenuhi })
+    .eq('id', requestID)
+    .select()
+    
+  if(errorBloodFilled) throw errorBloodFilled;
+  if(!bloodFilled) throw { message: "RequestID tidak ditemukan", code: 404 };
+  // if(data.status === 'Tercukupi') throw { message: 'Recipient blood has been fulfiled'}
+  return bloodFilled[0];
 }
 
 
