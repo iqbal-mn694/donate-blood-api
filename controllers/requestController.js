@@ -57,15 +57,20 @@ exports.bloodRequestFinish = asyncWrapper(async (req, res) => {
   const { jumlahTerpenuhi } = req.body;
 
 
-  await updateFilledRequest(requestID, jumlahTerpenuhi);
-  const getBloodRequest = await getBloodRequestByID(requestID)
-  const donationTotal = getBloodRequest.jumlah_terpenuhi;
-  const bloodRequestQuantity = getBloodRequest.quantity;
+  
+  let getBloodRequest = await getBloodRequestByID(requestID);
+  let donationTotal = getBloodRequest.jumlah_terpenuhi;
+  let bloodRequestQuantity = getBloodRequest.quantity;
 
   if(jumlahTerpenuhi > bloodRequestQuantity) {
     res.status(200).json({ success: true, status: 200, message: 'Can not donate exceed quantity', data: getBloodRequest });
     return;
   }
+
+  await updateFilledRequest(requestID, jumlahTerpenuhi);
+  getBloodRequest = await getBloodRequestByID(requestID);
+  donationTotal = getBloodRequest.jumlah_terpenuhi;
+  bloodRequestQuantity = getBloodRequest.quantity;
 
   if((donationTotal === bloodRequestQuantity)) {
     const fulfilled = await updateRequestStatus(requestID, "Tercukupi"); 
