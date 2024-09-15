@@ -12,20 +12,23 @@ exports.history = asyncWrapper(async (req, res) => {
 
     if(data.length === 0) throw { message: "History is empty", statusCode: 404 };
  
-  const newData = data.map(record => {
-    return {
-      id: record.id, 
-      recipientID: (record.blood_request && record.request.id) || null,
-      donorID: (record.donor && record.donor_id || null), 
-      recipient_name: (record.blood_request && record.blood_request.name) || null,
-      donor_name: (record.donor && record.donor.donor_name) || null,  
-      option: (record.option),
-      created_at: record.created_at
-    };
-  });
+    
+    // console.log(data)
+  // const newData = data.map(record => {
+  //   return {
+  //     id: record.id, 
+  //     recipientID: (record.blood_request && record.request.id) || null,
+  //     donorID: (record.donor && record.donor_id || null), 
+  //     recipient_name: (record.blood_request && record.blood_request.name) || null,
+  //     donor_name: (record.donor && record.donor.donor_name) || null,  
+  //     option: (record.option),
+  //     created_at: record.created_at
+  //   };
+  // });
+
   
   if(error) throw error;
-  res.status(200).json({ success: true, status: 200, data: newData });
+  res.status(200).json({ success: true, status: 200, data });
 });
 
 exports.historyDetail = asyncWrapper(async (req, res) => {
@@ -40,19 +43,19 @@ exports.historyDetail = asyncWrapper(async (req, res) => {
 
     if(data.length === 0) throw { message: "History detail not found", statusCode: 404 };
 
-    const newData = data.map(record => {
-      return {
-        id: record.id, 
-        recipientID: (record.blood_request && record.blood_request.id) || null,
-        donorID: (record.donor && record.donor.id || null), 
-        recipient_name: (record.blood_request && record.blood_request.name) || null,
-        donor_name: (record.donor && record.donor.donor_name) || null,  
-        created_at: record.created_at
-      };
-    });
+    // const newData = data.map(record => {
+    //   return {
+    //     id: record.id, 
+    //     recipientID: (record.blood_request && record.blood_request.id) || null,
+    //     donorID: (record.donor && record.donor.id || null), 
+    //     recipient_name: (record.blood_request && record.blood_request.name) || null,
+    //     donor_name: (record.donor && record.donor.donor_name) || null,  
+    //     created_at: record.created_at
+    //   };
+    // });
 
   
   if(error) throw error;
-  res.status(200).json({ success: true, status: 200, data: newData });
+  res.status(200).json({ success: true, status: 200, data });
 });
 
