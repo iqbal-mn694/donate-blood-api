@@ -38,7 +38,7 @@ exports.updateBloodRequest = asyncWrapper(async (req, res) => {
 exports.getBloodRequest = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const { requestID } = req.params;
-  const bloodRequestedByID = await getBloodRequestByID(userID, requestID);
+  const bloodRequestedByID = await getBloodRequestByID(requestID);
 
   res.status(200).json({ success: true, status: 200, data: bloodRequestedByID });
 });
