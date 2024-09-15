@@ -74,7 +74,7 @@ router.post('/:requestID', auth, donateBloodByRequestID);
 
 router.get('/donation-detail/:donorID', auth, detailDonorByDonorID);
 
-router.get('/recipient', auth, detailDonorByRequestID);
+router.get('/recipient/:requestID', auth, detailDonorByRequestID);
 
 router.delete('/cancel/:donorID', auth, cancelDonateBlood)
 
