@@ -9,7 +9,7 @@ const { insertDonor, getDetailDonor, getDetailDonorByRequestID, getDetailDonorBy
 exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const { requestID } = req.params;
-  const { donorName, bloodType, donorAddress } = req.body;
+  const { donorName, bloodType, donorAddress, phone } = req.body;
 
   const getBloodRequest = await getBloodRequestByID(requestID)
   const donationTotal = getBloodRequest.jumlah_terpenuhi;
@@ -18,7 +18,7 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
   // check if user's blood request is fulfiled
 
   if(donationTotal < bloodRequestQuantity) {
-    const donor = await insertDonor(userID, donorName, bloodType, donorAddress);
+    const donor = await insertDonor(userID, donorName, bloodType, donorAddress, phone);
     await updateRequestStatus(requestID, "Kurang"); 
 
     const donation = await insertDonation(userID, requestID, donor[0].id);
@@ -46,9 +46,9 @@ exports.detailDonorByDonorID = asyncWrapper(async (req, res) => {
 
 exports.donateBlood = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
-  const { donorName, bloodType } = req.body;
+  const { donorName, bloodType, donorAddress, phone } = req.body;
       
-  await insertDonor(userID, donorName, bloodType);
+  await insertDonor(userID, donorName, bloodType, donorAddress, phone);
   await insertDonation(userID);
   res.status(201).json({ success: true, status: 201, message: "Blood has been donated successfully" });
 })

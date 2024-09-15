@@ -9,7 +9,9 @@ const {
   deleteBloodRequest,
   clearBloodRequest, 
   getBloodRequest,
-  bloodRequestFinish} = require('../controllers/requestController');
+  bloodRequestFinish,
+  bloodRequestProgress
+} = require('../controllers/requestController');
 
 /**
  * @swagger
@@ -186,7 +188,8 @@ router.post('/', auth, makeBloodRequest);
 */
 router.get('/', auth, getBloodRequests);
 
-router.post('/finish/:requestID', auth, bloodRequestFinish)
+router.get('/progress/:requestID', auth, bloodRequestProgress);
+router.post('/finish/:requestID', auth, bloodRequestFinish);
 
 /**
  * @swagger

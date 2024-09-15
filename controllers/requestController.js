@@ -18,8 +18,8 @@ exports.makeBloodRequest = asyncWrapper(async (req, res, next) => {
 
   if(validateInput && validateInput.length !== 0) throw { status: 422, messages: validateInput };
   const { id: userID } = req.user;
-  const { name, recipientAddress, bloodType, quantity, hospitalName, longitude, latitude } = req.body;
-  const bloodRequest = await makeBloodRequest(userID, name, recipientAddress, bloodType, quantity, hospitalName, longitude, latitude);
+  const { name, recipientAddress, phone, bloodType, quantity, hospitalName, longitude, latitude } = req.body;
+  const bloodRequest = await makeBloodRequest(userID, name, recipientAddress, phone, bloodType, quantity, hospitalName, longitude, latitude);
   
   res.status(201).json({ success: true, status: 201, data: bloodRequest })
 });
@@ -50,6 +50,22 @@ exports.getBloodRequests = asyncWrapper(async (req, res) => {
 
   res.status(200).json({ success: true, status: 200, data: bloodRequestedList });
 });
+
+exports.bloodRequestProgress = asyncWrapper(async (req, res) => {
+  const { id: userID } = req.user;
+  const { requestID } = req.params;
+  const bloodRequestedByID = await getBloodRequestByID(requestID);
+  const bloodRequestStatus = bloodRequestedByID.status;
+
+  if((bloodRequestStatus === 'Menunggu' || bloodRequestStatus === 'Kurang')) {
+    res.status(200).json({ success: true, status: 200, message: 'Blood request is on progress', data: bloodRequestedByID });
+    return;
+  }
+
+  res.status(500).json({ success: false, status: 500, message: 'Something went wrong', data: []});
+
+});
+
 
 exports.bloodRequestFinish = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;

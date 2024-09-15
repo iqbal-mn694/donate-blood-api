@@ -1,14 +1,15 @@
 const asyncWrapper = require("../libs/asyncWrapper");
 const db = require("./dbConnection")
 
-exports.insertDonor = async(getAuthID, donorName, bloodType, donorAddress) => {
+exports.insertDonor = async(getAuthID, donorName, bloodType, donorAddress, phone) => {
     const { data, error } = await db
     .from('donor')
     .insert({
       user_id: getAuthID,
       donor_name: donorName,
       blood_type: bloodType,
-      donor_address: donorAddress
+      donor_address: donorAddress,
+      phone: phone
     })
     .select()
 
@@ -31,7 +32,7 @@ exports.getDetailDonorByRequestID = async(requestID) => {
   const { data, error } = await db
   .from('donation')
   .select(`*, 
-    donor:donor_id ( donor_name, blood_type ), request:request_id ( name, blood_type, quantity, hospital_name, request_at, recipient_address, status )`)
+    donor:donor_id ( donor_name, blood_type, quantity, donor_address, phone ), request:request_id ( name, blood_type, quantity, hospital_name, request_at, recipient_address, phone, status )`)
   .eq('request_id', requestID);
 
   if(error) throw error;
@@ -44,7 +45,7 @@ exports.getDetailDonorByDonorID = async(donorID) => {
   const { data, error } = await db
   .from('donation')
   .select(`*, 
-    donor:donor_id ( donor_name, blood_type ), request:request_id ( name, blood_type, quantity, hospital_name, request_at, recipient_address, status )`)
+    donor:donor_id ( donor_name, blood_type, donor_address, phone ), request:request_id ( name, blood_type, quantity, hospital_name, request_at, recipient_address, phone, status )`)
   .eq('donor_id', donorID);
 
   if(error) throw error;
