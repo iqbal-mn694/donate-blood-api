@@ -7,7 +7,8 @@ const {
   donationByID,
   deleteDonation,
   clearDonation,
-  detailDonationProcessed 
+  detailDonationProcessed, 
+  donationProgress
 } = require('../controllers/donationController');
 
 /**
@@ -127,6 +128,8 @@ router.get('/', auth, donation);
  *        description: Internal server error
 */
 router.get('/:donationID', auth, donationByID);
+
+router.get('/progress/2', auth, donationProgress);
 
 router.get('/processed/:processedID', auth, detailDonationProcessed);
 
