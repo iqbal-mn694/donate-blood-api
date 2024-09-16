@@ -74,6 +74,8 @@ const {
 */
 router.get('/', auth, donation);
 
+router.get('/progress', auth, donationProgress);
+
 /**
  * @swagger
  * /api/v1/donations/{donationID}:
@@ -128,8 +130,6 @@ router.get('/', auth, donation);
  *        description: Internal server error
 */
 router.get('/:donationID', auth, donationByID);
-
-router.get('/progress/2', auth, donationProgress);
 
 router.get('/processed/:processedID', auth, detailDonationProcessed);
 

@@ -32,7 +32,7 @@ exports.donationProgress = asyncWrapper(async (req, res) => {
   //   return;
   // }
 
-  res.status(500).json({ success: false, status: 200, message: 'Something went wrong', data: status });
+  res.status(200).json({ success: false, status: 200, message: 'Blood request is on progress', data: donationByUserID});
 
 });
 
