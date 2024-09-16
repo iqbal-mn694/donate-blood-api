@@ -21,18 +21,8 @@ exports.donationByID = asyncWrapper(async (req, res) => {
 exports.donationProgress = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const donationByUserID= await getDonationProgressByUserID(userID);
-  const status = donationByUserID.request;
 
-
-  // const bloodRequestedByID = await getBloodRequestByID(requestID);
-  // const bloodRequestStatus = bloodRequestedByID.status;
-
-  // if((bloodRequestStatus === 'Menunggu' || bloodRequestStatus === 'Kurang')) {
-  //   res.status(200).json({ success: true, status: 200, message: 'Blood request is on progress', data: bloodRequestedByID });
-  //   return;
-  // }
-
-  res.status(200).json({ success: false, status: 200, message: 'Blood request is on progress', data: donationByUserID});
+  res.status(200).json({ success: `true`, status: 200, message: 'Blood request is on progress', data: donationByUserID});
 
 });
 
