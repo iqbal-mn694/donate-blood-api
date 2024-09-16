@@ -9,7 +9,7 @@ exports.insertDonation = async(getAuthID, requestID, donorID) => {
       donor_id: donorID
     })
     .select(`*, 
-    donor:donor_id ( id, donor_name, blood_type, donor_address, donated_at  ), request:request_id ( id, user_id, name, blood_type, quantity, hospital_name, request_at, recipient_address, jumlah_terpenuhi, status )`);
+    donor:donor_id ( id, donor_name, blood_type, donor_address, phone, donated_at  ), request:request_id ( id, user_id, name, blood_type, quantity, hospital_name, request_at, recipient_address, phone, jumlah_terpenuhi, status )`);
 
   if(error) throw error;
   
