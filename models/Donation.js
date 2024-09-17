@@ -58,13 +58,14 @@ exports.getDonationProgressByUserID = async (authID) => {
     .select(`*, 
       donor:donor_id ( id, donor_name, blood_type, donor_address, donated_at, phone ),
       request:request_id ( id, user_id, name, blood_type, quantity, hospital_name, request_at, recipient_address, phone, jumlah_terpenuhi, status )`)
-    .eq('user_id', authID)
-    .neq('request.status', 'Tercukupi')
-  
+    .eq('user_id', authID);
+
+  const filteredData = data.filter((e) => {return e.request.status !== "Tercukupi"})
+
   if(data.length === 0 || !data) throw { message: "Donation Progress is empty", statusCode: 404 };
   if(error) throw error;
   
-  return data[0];
+  return filteredData;
 }
 
 exports.getDonationById = async(getAuthID, donationID) => {
