@@ -28,7 +28,7 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
   }
 
   if(donationTotal >= bloodRequestQuantity) {
-    await updateRequestStatus(requestID, "Kurang");
+    await updateRequestStatus(requestID, "Terpenuhi");
     res.status(200).json({ success: true, status: 200, message: 'Request status is fulfiled', data: getBloodRequest });
     return;
   }

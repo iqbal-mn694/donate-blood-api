@@ -51,22 +51,6 @@ exports.getBloodRequests = asyncWrapper(async (req, res) => {
   res.status(200).json({ success: true, status: 200, data: bloodRequestedList });
 });
 
-exports.bloodRequestProgress = asyncWrapper(async (req, res) => {
-  const { id: userID } = req.user;
-  const { requestID } = req.params;
-  const bloodRequestedByID = await getBloodRequestByID(requestID);
-  const bloodRequestStatus = bloodRequestedByID.status;
-
-  if((bloodRequestStatus === 'Menunggu' || bloodRequestStatus === 'Kurang')) {
-    res.status(200).json({ success: true, status: 200, message: 'Blood request is on progress', data: bloodRequestedByID });
-    return;
-  }
-
-  res.status(500).json({ success: false, status: 500, message: 'Something went wrong', data: []});
-
-});
-
-
 exports.bloodRequestFinish = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const { requestID } = req.params;
@@ -76,10 +60,10 @@ exports.bloodRequestFinish = asyncWrapper(async (req, res) => {
   let donationTotal = getBloodRequest.jumlah_terpenuhi;
   let bloodRequestQuantity = getBloodRequest.quantity;
 
-  if(jumlahTerpenuhi > bloodRequestQuantity) {
-    res.status(200).json({ success: true, status: 200, message: 'Can not donate exceed quantity', data: getBloodRequest });
-    return;
-  }
+  // if(jumlahTerpenuhi > bloodRequestQuantity) {
+  //   res.status(200).json({ success: true, status: 200, message: 'Can not donate exceed quantity', data: getBloodRequest });
+  //   return;
+  // }
 
   await updateFilledRequest(requestID, jumlahTerpenuhi);
   getBloodRequest = await getBloodRequestByID(requestID);
