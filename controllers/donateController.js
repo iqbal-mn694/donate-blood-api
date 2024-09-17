@@ -17,13 +17,19 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
 
   // check if user's blood request is fulfiled
 
+  const donor = await insertDonor(userID, donorName, bloodType, donorAddress, phone);
   if(donationTotal < bloodRequestQuantity) {
-    const donor = await insertDonor(userID, donorName, bloodType, donorAddress, phone);
     await updateRequestStatus(requestID, "Kurang"); 
 
     const donation = await insertDonation(userID, requestUser, requestID, donor[0].id);
     
     res.status(201).json({ success: true, status: 201, message: 'Blood has been donated successfully', data: donation });
+    return;
+  }
+
+  if(donationTotal >= bloodRequestQuantity) {
+    await updateRequestStatus(requestID, "Kurang");
+    res.status(200).json({ success: true, status: 200, message: 'Request status is fulfiled', data: getBloodRequest });
     return;
   }
 
