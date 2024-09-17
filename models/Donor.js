@@ -16,6 +16,7 @@ exports.insertDonor = async(getAuthID, donorName, bloodType, donorAddress, phone
     if(error) throw error;
     return data;
 }
+// cobaan
 
 exports.cancelDonor = async(getAuthID, donorID) => {
   const { data, error } = await db
