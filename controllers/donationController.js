@@ -27,10 +27,9 @@ exports.donationProgress = asyncWrapper(async (req, res) => {
 });
 
 exports.detailDonationProcessed = asyncWrapper(async (req, res) => {
-  const { id: userID } = req.user;
   const { processedID } = req.params;
 
-  const donorProcessed = await getDonationProcessedDetail(userID, processedID);
+  const donorProcessed = await getDonationProcessedDetail(processedID);
   res.status(200).json({ success: true, status: 200, message: 'Success get detail donation process', data: donorProcessed })
 });
 
