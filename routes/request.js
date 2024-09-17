@@ -188,7 +188,6 @@ router.post('/', auth, makeBloodRequest);
 */
 router.get('/', auth, getBloodRequests);
 
-router.get('/progress/:requestID', auth, bloodRequestProgress);
 router.post('/finish/:requestID', auth, bloodRequestFinish);
 
 /**
