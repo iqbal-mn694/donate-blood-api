@@ -38,7 +38,7 @@ exports.getDonation = async (getAuthID) => {
   return data;
 }
 
-exports.getDonationProcessedDetail = async (authID, donorID) => {
+exports.getDonationProcessedDetail = async (donorID) => {
   const { data, error } = await db
     .from('donation')
     .select(`*, 
@@ -46,7 +46,7 @@ exports.getDonationProcessedDetail = async (authID, donorID) => {
       request:request_id ( id, user_id, name, blood_type, quantity, hospital_name, request_at, recipient_address, phone, jumlah_terpenuhi, status )`)
     .eq('donor_id', donorID);
 
-  if(data.length === 0 || !data) throw { message: "Donation Processed is empty", statusCode: 404 };
+  if(!data) throw { message: "Donation Processed is empty", statusCode: 404 };
   if(error) throw error;
   
   return data;
