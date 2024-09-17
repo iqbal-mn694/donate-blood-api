@@ -9,7 +9,7 @@ const { insertDonor, getDetailDonor, getDetailDonorByRequestID, getDetailDonorBy
 exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
   const { id: userID } = req.user;
   const { requestID } = req.params;
-  const { donorName, bloodType, donorAddress, phone } = req.body;
+  const { donorName, requestUser, bloodType, donorAddress, phone } = req.body;
 
   const getBloodRequest = await getBloodRequestByID(requestID)
   const donationTotal = getBloodRequest.jumlah_terpenuhi;
@@ -21,7 +21,7 @@ exports.donateBloodByRequestID = asyncWrapper(async (req, res) => {
     const donor = await insertDonor(userID, donorName, bloodType, donorAddress, phone);
     await updateRequestStatus(requestID, "Kurang"); 
 
-    const donation = await insertDonation(userID, requestID, donor[0].id);
+    const donation = await insertDonation(userID, requestUser, requestID, donor[0].id);
     
     res.status(201).json({ success: true, status: 201, message: 'Blood has been donated successfully', data: donation });
     return;
